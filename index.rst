@@ -9,6 +9,7 @@ alike.
 
    protocol-basics
    protocol-methods
+   protocol-methods-extra
    protocol-changes
    protocol-removed
    protocol-ideas
