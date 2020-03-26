@@ -1,5 +1,5 @@
 # Electrum Cash Protocol reference
 
-Hosted on https://bitcoincash.network/electrum/
+Hosted on https://electrum-cash-protocol.readthedocs.io/en/latest/
 
 Forked from ElectrumX documentation
