@@ -148,7 +148,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'fulcrum', 'Fulcrum Documentation',
+    (master_doc, 'Fulcrum', 'Fulcrum Documentation',
      [author], 1)
 ]
 
@@ -160,7 +160,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'Fulcrum', 'Fulcrum Documentation',
-     author, 'Fulcrum', 'One line description of project.',
-     'Miscellaneous'),
+     author, 'Fulcrum', 'A Fast & Numble Bitcoin Cash SPV Server.',
+     'Finance'),
 ]
 
