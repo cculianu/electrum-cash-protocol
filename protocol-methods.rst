@@ -978,7 +978,7 @@ peers lists.  It sould not be used by wallet clients.
 server.banner
 =============
 
-Return a banner to be shown in the Electrum console.
+Return a banner to be shown in the Electron Cash console.
 
 **Signature**
 
@@ -1055,7 +1055,7 @@ Return a list of features and services supported by the server.
   * *protocol_max*
   * *protocol_min*
 
-    Strings that are the minimum and maximum Electrum protocol
+    Strings that are the minimum and maximum Electrum Cash protocol
     versions this server speaks.  Example: "1.1".
 
   * *pruning*
@@ -1101,10 +1101,10 @@ Return a list of features and services supported by the server.
   {
       "genesis_hash": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
       "hosts": {"14.3.140.101": {"tcp_port": 51001, "ssl_port": 51002}},
-      "protocol_max": "1.0",
-      "protocol_min": "1.0",
+      "protocol_max": "1.4",
+      "protocol_min": "1.4.3",
       "pruning": null,
-      "server_version": "ElectrumX 1.0.17",
+      "server_version": "Fulcrum 1.0.5",
       "hash_function": "sha256"
   }
 

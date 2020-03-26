@@ -5,13 +5,13 @@ Message Stream
 --------------
 
 Clients and servers communicate using **JSON RPC** over an unspecified underlying stream
-transport.  Examples include TCP, SSL, WS and WSS.
+transport.  Examples include TCP and SSL (with WS and WSS support planned for the future).
 
 Two standards `JSON RPC 1.0
 <http://www.jsonrpc.org/specification_v1>`_ and `JSON RPC 2.0
 <http://www.jsonrpc.org/specification>`_ are specified; use of version
 2.0 is encouraged but not required.  Server support of batch requests
-is not implemented in Fulcrum.
+is *not implemented* in Fulcrum.
 
 .. note:: A client or server should only indicate JSON RPC 2.0 by
   setting the `jsonrpc
@@ -21,10 +21,10 @@ is not implemented in Fulcrum.
   to function correctly.  Those that do not will be disconnected and
   possibly blacklisted.
 
-Over TCP and SSL raw sockets each RPC call, and each response, MUST be terminated by a
-single newline to delimit messages.  The JSON specification does not permit control characters
-within strings, so no confusion is possible there.  However it does permit newlines as
-extraneous whitespace between elements; client and server MUST NOT use newlines in such a
+For the TCP and SSL transports: Each RPC call MUST be delimited by a single newline.
+The JSON specification does not permit control characters within strings, so no 
+confusion is possible there.  However it does permit newlines as extraneous 
+whitespace between elements; client and server MUST NOT use newlines in such a 
 way.
 
 A server advertising support for a particular protocol version MUST
