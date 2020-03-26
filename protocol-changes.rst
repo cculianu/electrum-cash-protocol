@@ -169,7 +169,7 @@ New methods
 
 Version 1.4.2
 =============
-   * :func:`server.features` changed the requirement of key *hosts* from being MUST be present to RECOMMENDED. Note that ElectrumX will not peer with your server without this key.
+   * :func:`server.features` changed the requirement of key *hosts* from being MUST be present to RECOMMENDED. Note that Fulcrum and ElectrumX will not peer with your server without this key.
 
 Version 1.4.3
 =============

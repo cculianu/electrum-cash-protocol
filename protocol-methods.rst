@@ -992,7 +992,7 @@ Return a banner to be shown in the Electrum console.
 
   ::
 
-     "Welcome to Electrum!"
+     "Welcome to Fulcrum!"
 
 
 server.donation_address

@@ -11,30 +11,21 @@ Two standards `JSON RPC 1.0
 <http://www.jsonrpc.org/specification_v1>`_ and `JSON RPC 2.0
 <http://www.jsonrpc.org/specification>`_ are specified; use of version
 2.0 is encouraged but not required.  Server support of batch requests
-is encouraged for version 1.0 but not required.
+is not implemented in Fulcrum.
 
 .. note:: A client or server should only indicate JSON RPC 2.0 by
   setting the `jsonrpc
   <http://www.jsonrpc.org/specification#request_object>`_ member of
   its messages to ``"2.0"`` if it supports the version 2.0 protocol in
-  its entirety.  ElectrumX does and will expect clients advertizing so
+  its entirety.  Fulcrum does and will expect clients advertizing so
   to function correctly.  Those that do not will be disconnected and
   possibly blacklisted.
 
-Clients making batch requests should limit their size depending on the
-nature of their query, because servers will limit response size as an
-anti-DoS mechanism.
-
 Over TCP and SSL raw sockets each RPC call, and each response, MUST be terminated by a
-single newline to delimit messages.  Websocket messages are already framed so they MUST
-NOT be newline terminated.  The JSON specification does not permit control characters
+single newline to delimit messages.  The JSON specification does not permit control characters
 within strings, so no confusion is possible there.  However it does permit newlines as
 extraneous whitespace between elements; client and server MUST NOT use newlines in such a
 way.
-
-If using JSON RPC 2.0's feature of parameter passing by name, the
-names shown in the description of the method or notification in
-question MUST be used.
 
 A server advertising support for a particular protocol version MUST
 support each method documented for that protocol version, unless the
@@ -201,5 +192,5 @@ and confirm the returned roots match.
 
 .. note:: with 500,000 headers of 80 bytes each, a naïve server
   implementation would require hashing approximately 88MB of data to
-  provide a single merkle proof.  ElectrumX implements an optimization
+  provide a single merkle proof.  Fulcrum implements an optimization
   such that it hashes only approximately 180KB of data per proof.
