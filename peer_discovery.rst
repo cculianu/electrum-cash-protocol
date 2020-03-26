@@ -3,15 +3,12 @@
 Peer Discovery
 ==============
 
-This was imlpemented in ElectrumX as of version 0.11.0.  Support for
-IRC peer discovery was removed in ElectrumX version 1.2.1.
-
 The :dfn:`peer database` is an in-memory store of peers with at least
 the following information about a peer, required for a response to the
 :func:`server.peers.subscribe` RPC call:
 
 * host name
-* ip address
+* IP address
 * TCP and SSL port numbers
 * protocol version
 * pruning limit, if any
@@ -24,14 +21,14 @@ A list of hard-coded, well-known peers seeds the peer discovery
 process.  Ideally it should have at least 4 servers that have shown
 commitment to reliable service.
 
-In ElectrumX this is a per-coin property in `lib/coins.py
-<https://github.com/kyuupichan/electrumx/blob/master/lib/coins.py>`_.
+In Fulcrum the hard-coded peers come from here: `servers.json 
+<https://github.com/cculianu/Fulcrum/resources/servers.json>`_.
 
 
 server.peers.subscribe
 ----------------------
 
-:func:`server.peers.subscribe` is used by Electrum clients to get a
+:func:`server.peers.subscribe` is used by SPV clients to get a
 list of peer servers, in preference to a hard-coded list of peer
 servers in the client, which it will fall back to if necessary.
 
@@ -43,18 +40,21 @@ to recently.  Only reporting recent good peers ensures that those that
 have gone offline will be forgotten quickly and not be passed around
 for long.
 
-In ElectrumX, "recently" is taken to be the last 24 hours.  Only one
-peer from each IPv4/16 netmask is returned, and the number of onion
-peers is limited.
+In Fulcrum, "recently" is taken to be servers it is actively able
+to maintain a connection to.  All Fulcrum servers keep client connections
+to all of their peers at all times, in order to ensure that the returned
+list is as up-to-date as possible.  
 
 
 Maintaining the Peer Database
 -----------------------------
 
-In order to keep its peer database up-to-date and fresh, after some
-time has passed since the last successful connection to a peer, an
-Electrum server should make another attempt to connect, choosing
-either the TCP or SSL port.
+In order to keep its peer database up-to-date and fresh, Fulcrum 
+maintains a constant connection to all of its peers, acting as an SPV
+client but not taking up much bandwidth. If connections are dropped or
+periodically fail, after some time has passed since the last successful 
+connection to a peer, a Fulcrum server will make another attempt to 
+connect, choosing either the TCP or SSL port.
 
 On connecting it should issue :func:`server.peers.subscribe`,
 :func:`blockchain.headers.subscribe`, and :func:`server.features` RPC
@@ -84,12 +84,11 @@ connection attempt, the peer entry should be removed from the
 database.  This ensures that all peers that have gone offline will
 eventually be forgotten by the network entirely.
 
-ElectrumX will connect to the SSL port if both ports are available.
+Fulcrum will connect to the SSL port if both ports are available.
 If that fails it will fall back to the TCP port.  It tries to
-reconnect to a good peer at least once every 24 hours, and a failing
-after 5 minutes but with exponential backoff.  It forgets a peer
-entirely if a few days have passed since a successful connection.
-ElectrumX attempts to connect to onion peers through a Tor proxy that
+reconnect to a good peer at least once every hour.  It forgets a peer
+entirely if 24 hours have passed since a successful connection.
+Fulcrum attempts to connect to onion peers through a Tor proxy that
 can be configured or that it will try to autodetect.
 
 
@@ -98,7 +97,7 @@ server.features
 
 :func:`server.features` is a fairly new RPC call that a server can use
 to advertise what services and features it offers.  It is intended for
-use by Electrum clients as well as other peers.  Peers will use it to
+use by SPV clients as well as other peers.  Peers will use it to
 gather peer information from the peer itself.
 
 The call takes no arguments and returns a dictionary keyed by feature

@@ -82,7 +82,7 @@ html_theme = 'alabaster'
 #
 html_theme_options = {
     'description': 'Electrum Cash protocol reference',
-    'github_user': 'dagurval',
+    'github_user': 'cculianu',
     'github_repo': 'electrum-cash-protocol',
     'github_button': True,
     'github_type': 'star',
@@ -111,7 +111,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ElectrumCashdoc'
+htmlhelp_basename = 'FulcrumDoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -159,7 +159,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ElectrumX', 'ElectrumX Documentation',
-     author, 'ElectrumX', 'One line description of project.',
+    (master_doc, 'Fulcrum', 'Fulcrum Documentation',
+     author, 'Fulcrum', 'One line description of project.',
      'Miscellaneous'),
 ]
