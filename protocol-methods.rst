@@ -228,8 +228,7 @@ Return the block header at the given height.
 
   * *header*
 
-    The raw block header as a hexadecimal string.  Starting with version 1.4.1,
-    AuxPoW data (if present in the original header) is truncated.
+    The raw block header as a hexadecimal string.
 
   * *root*
 

@@ -15,7 +15,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-VERSION="Electrum Cash Protocol Reference 1.4.3"
+VERSION="Fulcrum Protocol Reference 1.4.3"
 
 # -- Project information -----------------------------------------------------
 
@@ -148,7 +148,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'Fulcrum', 'Fulcrum Documentation',
+    (master_doc, 'fulcrum', 'Fulcrum Documentation',
      [author], 1)
 ]
 
