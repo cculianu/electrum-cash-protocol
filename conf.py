@@ -15,7 +15,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-VERSION="Electrum Cash Protocol Reference 1.5"
+VERSION="Electrum Cash Protocol Reference 1.4.3"
 
 # -- Project information -----------------------------------------------------
 
