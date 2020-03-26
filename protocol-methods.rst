@@ -14,9 +14,10 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
 
   * *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 
@@ -34,9 +35,10 @@ Return the confirmed and unconfirmed history of a Bitcoin Cash address.
 
   * *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 
@@ -54,9 +56,10 @@ Return the unconfirmed transactions of a Bitcoin Cash address.
 
   * *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 
@@ -77,9 +80,10 @@ them.
 
   * *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 
@@ -98,9 +102,10 @@ Return an ordered list of UTXOs sent to a Bitcoin Cash address.
 
   * *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 
@@ -118,9 +123,10 @@ Subscribe to a Bitcoin Cash address.
 
   *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 
@@ -171,9 +177,10 @@ its :ref:`status <status>` changes.
 
   *address*
 
-    The address as a Cash Address string (with or without prefix). Some server
-    implementations may also support Legacy (base58) addresses but are not
-    required to do so by this specification.
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
 
 **Result**
 

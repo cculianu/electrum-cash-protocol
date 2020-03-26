@@ -21,7 +21,7 @@ VERSION="Electrum Cash Protocol Reference 1.4.3"
 
 project = 'Electrum Cash Protocol'
 copyright = '2016-2019, Neil Booth, 2020, Electrum Cash protocol devs'
-author = 'Neil Booth, Electrum Cash protocol devs'
+author = 'Neil Booth, Calin Culianu, Electrum Cash protocol devs'
 
 # The full version including branding
 release = VERSION
@@ -138,8 +138,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ElectrumX.tex', 'ElectrumX Documentation',
-     'Neil Booth', 'manual'),
+    (master_doc, 'Fulcrum.tex', 'Fulcrum Documentation',
+     'Neil Booth, Calin Culianu', 'manual'),
 ]
 
 
@@ -148,7 +148,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'electrumx', 'ElectrumX Documentation',
+    (master_doc, 'fulcrum', 'Fulcrum Documentation',
      [author], 1)
 ]
 
@@ -163,3 +163,4 @@ texinfo_documents = [
      author, 'Fulcrum', 'One line description of project.',
      'Miscellaneous'),
 ]
+
