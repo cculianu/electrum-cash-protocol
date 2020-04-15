@@ -1096,6 +1096,16 @@ Return a list of features and services supported by the server.
       An integer.  Omit or set to :const:`null` if TCP connectivity is
       not provided.
 
+    * *ws_port*
+
+      An integer.  Omit or set to :const:`null` if Web Socket (ws://)
+      connectivity is not provided.
+
+    * *wss_port*
+
+      An integer.  Omit or set to :const:`null` if Web Socket Secure (wss://)
+      connectivity is not provided.
+
     A server should ignore information provided about any host other
     than the one it connected to.
 
