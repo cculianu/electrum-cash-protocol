@@ -190,3 +190,10 @@ New methods
   * :func:`blockchain.address.subscribe` was brought back after having been
     removed in 1.3.
   * :func:`blockchain.address.unsubscribe` to unsubscribe from an address.
+
+Version 1.4.4
+=============
+
+New methods
+-----------
+  * :func:`blockchain.utxo.get_info` gets information for an unspent transaction output.

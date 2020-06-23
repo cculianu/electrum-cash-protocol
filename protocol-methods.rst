@@ -926,6 +926,55 @@ When *merkle* is :const:`true`::
     ]
   }
 
+blockchain.utxo.get_info
+=================================
+
+Return information for an unspent transaction output.
+
+**Signature**
+
+  .. function:: blockchain.utxo.get_info(prevoutHash, prevoutN)
+  .. versionadded:: 1.4.4
+
+  *prevoutHash*
+
+    The UTXO's transaction hash as a hexadecimal string.
+
+  *prevoutN*
+
+    The UTXO's transaction output number. This should be a number in the range
+    0 <= prevoutN <= 65535
+
+**Result**
+
+  If the UTXO in question does not exist or is spent, :const:`null` is returned.
+  Otherwise, a dictionary will be returned containing the following keys:
+
+  * *confirmed_height*
+
+    (Optional) The integer height of the block the UTXO's transaction was
+    confirmed in. This key will be missing from the dictionary if the
+    transaction is in the mempool and is not yet confirmed.
+
+  * *scripthash*
+
+    The output's destination :ref:`script hash <script hashes>` as a hexadecimal
+    string.
+
+  * *value*
+
+    The output's value in integer minimum coin units (satoshis).
+
+**Result Example**
+
+::
+
+   {
+     "confirmed_height": 602123,
+     "scripthash": "1c1e184c97abc87626c497b95f755df1025f48b9c27d037ea335677c57f38e5c",
+     "value": 45318048
+   }
+
 mempool.get_fee_histogram
 =========================
 
