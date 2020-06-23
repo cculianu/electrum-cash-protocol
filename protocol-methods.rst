@@ -933,17 +933,17 @@ Return information for an unspent transaction output.
 
 **Signature**
 
-  .. function:: blockchain.utxo.get_info(prevoutHash, prevoutN)
+  .. function:: blockchain.utxo.get_info(tx_hash, out_n)
   .. versionadded:: 1.4.4
 
-  *prevoutHash*
+  *tx_hash*
 
     The UTXO's transaction hash as a hexadecimal string.
 
-  *prevoutN*
+  *out_n*
 
     The UTXO's transaction output number. This should be a number in the range
-    0 <= prevoutN <= 65535
+    0 <= out_n <= 65535
 
 **Result**
 
