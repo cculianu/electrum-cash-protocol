@@ -461,15 +461,15 @@ Return the confirmed and unconfirmed balances of a :ref:`script hash
 **Result**
 
   A dictionary with keys `confirmed` and `unconfirmed`.  The value of
-  each is the appropriate balance in satoshis as a string.
+  each is the appropriate balance in satoshis.
 
 **Result Example**
 
 ::
 
   {
-    "confirmed": "103873966",
-    "unconfirmed": "236844"
+    "confirmed": 103873966,
+    "unconfirmed": 236844
   }
 
 blockchain.scripthash.get_history
