@@ -237,6 +237,7 @@ Subscribe to receive the block height when a new block is found.
   when a new block is found.  The notification's signature is:
 
     .. function:: blockchain.numblocks.subscribe(height)
+       :noindex:
 
 blockchain.utxo.get_address
 ===========================

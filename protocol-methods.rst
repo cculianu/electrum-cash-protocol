@@ -139,6 +139,7 @@ Subscribe to a Bitcoin Cash address.
   signature is
 
   .. function:: blockchain.address.subscribe(address, status)
+     :noindex:
 
   .. note:: The address returned back to the client when notifying of status
             changes will be in the same encoding and syle as was provided when
@@ -184,9 +185,9 @@ its :ref:`status <status>` changes.
 
 **Result**
 
-  Returns :const:`True` if the address was subscribed to, otherwise
-  :const:`False`. Note that :const:`False` might be returned even for something
-  subscribed to earlier, because the server can drop subscriptions in rare
+  Returns :const:`true` if the address was previously subscribed-to, otherwise
+  :const:`false`. Note that :const:`false` might be returned even for something
+  subscribed-to earlier, because the server can drop subscriptions in rare
   circumstances.
 
 blockchain.block.header
@@ -401,6 +402,7 @@ Subscribe to receive block headers when a new block is found.
   when a new block is found.  The notification's signature is:
 
     .. function:: blockchain.headers.subscribe(header)
+       :noindex:
 
     * *header*
 
@@ -660,6 +662,7 @@ Subscribe to a script hash.
   hash changes.  Its signature is
 
     .. function:: blockchain.scripthash.subscribe(scripthash, status)
+       :noindex:
 
 blockchain.scripthash.unsubscribe
 =================================
@@ -678,9 +681,9 @@ Unsubscribe from a script hash, preventing future notifications if its :ref:`sta
 
 **Result**
 
-  Returns :const:`True` if the scripthash was subscribed to, otherwise
-  :const:`False`. Note that :const:`False` might be returned even for something
-  subscribed to earlier, because the server can drop subscriptions in rare
+  Returns :const:`true` if the scripthash was previously subscribed-to, otherwise
+  :const:`false`. Note that :const:`false` might be returned even for something
+  subscribed-to earlier, because the server can drop subscriptions in rare
   circumstances.
 
 blockchain.transaction.broadcast
@@ -802,23 +805,57 @@ When *verbose* is :const:`true`::
                                 "type": "pubkeyhash"},
               "value": 0.1360904}]}
 
-blockchain.transaction.get_merkle
+blockchain.transaction.get_height
 =================================
 
-Return the merkle branch to a confirmed transaction given its hash
-and height.
+Returns the block height for a confirmed transaction, or 0 for a mempool
+transaction, given its hash.
 
 **Signature**
 
-  .. function:: blockchain.transaction.get_merkle(tx_hash, height)
+  .. function:: blockchain.transaction.get_height(tx_hash)
+  .. versionadded:: 1.4.5
 
   *tx_hash*
 
     The transaction hash as a hexadecimal string.
 
-  *height*
+**Result**
 
-    The height at which it was confirmed, an integer.
+  Either a numeric value or :const:`null`.
+
+  * Numeric values :const:`> 0`
+
+    The transaction is confirmed at this block height.
+
+  * Numeric values :const:`== 0`
+
+    The transaction is not confirmed but is in the mempool.
+
+  * :const:`null`
+
+    The transaction is unknown.
+
+blockchain.transaction.get_merkle
+=================================
+
+Return the merkle branch to a confirmed transaction given its hash
+and, optionally, its height.
+
+**Signature**
+
+  .. function:: blockchain.transaction.get_merkle(tx_hash, [height])
+
+  *tx_hash*
+
+    The transaction hash as a hexadecimal string.
+
+  *height* (optional in 1.4.5 or above)
+
+    The height at which it was confirmed, an integer. As of version 1.4.5 of
+    the protocol, this second argument may be omitted, however if it is included
+    the lookup may return the results slightly faster since an extra database
+    lookup is avoided on the server-side.
 
 **Result**
 
@@ -926,8 +963,57 @@ When *merkle* is :const:`true`::
     ]
   }
 
+blockchain.transaction.subscribe
+================================
+
+Subscribe to a transaction in order to receive future notifications if its confirmation status changes.
+
+**Signature**
+
+  .. function:: blockchain.transaction.subscribe(tx_hash)
+  .. versionadded:: 1.4.5
+
+  *tx_hash*
+
+    The transaction hash as a hexadecimal string.
+
+**Result**
+
+  A result identical to what one would get from :func:`blockchain.transaction.get_height`.
+
+**Notifications**
+
+  The client will receive a notification when the confirmation status
+  of the transaction changes.  Its signature is
+
+    .. function:: blockchain.transction.subscribe(tx_hash, height)
+       :noindex:
+
+       With *height* being identical to what one would get from invoking :func:`blockchain.transaction.get_height`.
+
+blockchain.transaction.unsubscribe
+==================================
+
+Unsubscribe from a transaction, preventing future notifications if its confirmation status changes.
+
+**Signature**
+
+  .. function:: blockchain.transaction.unsubscribe(tx_hash)
+  .. versionadded:: 1.4.5
+
+  *tx_hash*
+
+    The transaction hash as a hexadecimal string.
+
+**Result**
+
+  Returns :const:`true` if the transaction was previously subscribed-to, otherwise
+  :const:`false`. Note that :const:`false` might be returned even for something
+  subscribed-to earlier, because the server can drop subscriptions in rare
+  circumstances.
+
 blockchain.utxo.get_info
-=================================
+========================
 
 Return information for an unspent transaction output.
 

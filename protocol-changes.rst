@@ -196,4 +196,34 @@ Version 1.4.4
 
 New methods
 -----------
+
   * :func:`blockchain.utxo.get_info` gets information for an unspent transaction output.
+
+Version 1.4.5
+=============
+
+Changes
+-------
+
+  * :func:`blockchain.transaction.get_merkle` now no longer requires the second
+    argument *height*. This argument is now optional but still recommended, in
+    order to save the server from having to look it up.
+
+New methods
+-----------
+
+  * :func:`blockchain.transaction.get_height` to retrieve the height of a
+    transaction.
+  * :func:`blockchain.transaction.subscribe` to be notified of transaction
+    confirmation status changes.
+  * :func:`blockchain.transaction.unsubscribe` to unsubscribe from a
+    previously subscribed-to transaction.
+  * :func:`blockchain.transaction.dsproof.get` to retrieve information about a
+    double-spend proof associated with a *tx_hash*.
+  * :func:`blockchain.transaction.dsproof.list` to list the double-spend proofs
+    currently being tracked in the bitcoin daemon's mempool.
+  * :func:`blockchain.transaction.dsproof.subscribe` to receive notifications on
+    whether a particular transaction is known by the network to have been
+    double-spent.
+  * :func:`blockchain.transaction.dsproof.unsubscribe` to unsubscribe from
+    receiving dsproof notifications for a particular transaction.
