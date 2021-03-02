@@ -22,9 +22,9 @@ is *not implemented* in Fulcrum.
   possibly blacklisted.
 
 For the TCP and SSL transports: Each RPC call MUST be delimited by a single newline.
-The JSON specification does not permit control characters within strings, so no 
-confusion is possible there.  However it does permit newlines as extraneous 
-whitespace between elements; client and server MUST NOT use newlines in such a 
+The JSON specification does not permit control characters within strings, so no
+confusion is possible there.  However it does permit newlines as extraneous
+whitespace between elements; client and server MUST NOT use newlines in such a
 way.
 
 A server advertising support for a particular protocol version MUST
@@ -194,3 +194,75 @@ and confirm the returned roots match.
   implementation would require hashing approximately 88MB of data to
   provide a single merkle proof.  Fulcrum implements an optimization
   such that it hashes only approximately 180KB of data per proof.
+
+
+.. _dsproofs:
+
+Double Spend Proofs (dsproofs)
+------------------------------
+
+A double spend proof is information collected by the Bitcoin Cash peer-to-peer
+network on transaction inputs for transactions in the mempool that are seen to
+have been attempted at being double-spent. Double-spend proofs only apply to
+mempool transactions. Once a transaction is confirmed, the double-spend attempt
+is no longer relevant (since the transaction cannot be double-spent anymore
+unless there is a reorg). Double-spend proofs indicate that a transaction may
+not confirm as expected, and that instead there is a risk that its conflicting
+transaction will confirm instead.
+
+`The specification for dsproofs can be found here <https://gitlab.com/-/snippets/1883331>`_.
+
+In Fulcrum, the dsproofs are returned as JSON objects with the following keys:
+
+  * **dspid**
+
+    This is the hexadecimal hash of the :const:`dsproof` as would
+    be returned by querying the BCHN dsproof RPC :const:`getdsproof`.
+
+  * **hex**
+
+    The raw serialized double-spend proof itself.
+
+  * **outpoint**
+
+    A JSON object containing the following keys:
+
+    * **txid**
+
+      The transaction hash of the transaction that generated this outpoint.
+
+    * **vout**
+
+      The integer output number for this outpoint.
+
+  * **txid**
+
+    The primary transaction that is associated with this :const:`dsproof`.
+
+  * **descendants**
+
+    A JSON array of *txid*'s of all the transactions that are potentially
+    affected by this double-spend attempt. This list will include `txid` above
+    plus all of its descendant transactions.
+
+An example `dsproof` object as might be returned by Fulcrum::
+
+    {
+      "dspid": "587d18bf8a64ede9c7450fdaeab27b9b3c46cfa8948f4c145f889601153c56b0",
+      "txid": "5b59ce35093fbd13549cd6f203d4b5b01762d70e75b8e9733dfc463e0ff8cc13",
+      "hex": "410c56078977120e828e4aacdd813a818d17c47d94183aa176d62c805d47697dddddf46c2ab68ee1e46a3e17aa7da548c38ec43416422d433b1782eb3298356df441",
+      "outpoint": {
+        "txid": "f6e2a16ba665d5402dad147fe35872961bc6961da62345a2171ee001cfcf7600",
+        "vout": 0
+      },
+      "descendants": [
+        "36fbb099e6de59d23477727e3199c65caae35ded957660f56fc681a6d81d5570",
+        "5b59ce35093fbd13549cd6f203d4b5b01762d70e75b8e9733dfc463e0ff8cc13"
+      ]
+    }
+
+Note that as of March 2021, only servers running Bitcoin Cash Node v22.3.0 or later
+are capable of reporting double-spend proofs via RPC, and thus only such servers
+will provide double-spend proofs to clients via the Electrum Cash protocol.
+Servers that support `dsproof` will have the key :const:`"dsproof"` set to
+:const:`true` in their :func:`server.features` map.

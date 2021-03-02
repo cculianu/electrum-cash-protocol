@@ -208,6 +208,7 @@ Changes
   * :func:`blockchain.transaction.get_merkle` now no longer requires the second
     argument *height*. This argument is now optional but still recommended, in
     order to save the server from having to look it up.
+  * :func:`server.features` added a new optional key, :const:`"dsproof"`.
 
 New methods
 -----------

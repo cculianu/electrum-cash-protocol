@@ -724,6 +724,122 @@ Protocol version 1.0 returning an error as the result:
 
   "258: txn-mempool-conflict"
 
+blockchain.transaction.dsproof.get
+==================================
+
+Returns information on a :ref:`double-spend proof <dsproofs>`. The query can be
+by either `tx_hash` or `dspid`.
+
+**Signature**
+
+  .. function:: blockchain.transaction.dsproof.get(hash)
+  .. versionadded:: 1.4.5
+
+  *hash*
+
+    The transaction hash (or `dspid`) as a hexadecimal string.
+
+
+**Result**
+
+    If the transaction in question has an associated :ref:`dsproof <dsproofs>`,
+    then a JSON object. Otherwise :const:`null`.
+
+**Example Results**::
+
+   {
+     "dspid": "587d18bf8a64ede9c7450fdaeab27b9b3c46cfa8948f4c145f889601153c56b0",
+     "txid": "5b59ce35093fbd13549cd6f203d4b5b01762d70e75b8e9733dfc463e0ff8cc13",
+     "hex": "410c56078977120e828e4aacdd813a818d17c47d94183aa176d62c805d47697dddddf46c2ab68ee1e46a3e17aa7da548c38ec43416422d433b1782eb3298356df441",
+     "outpoint": {
+       "txid": "f6e2a16ba665d5402dad147fe35872961bc6961da62345a2171ee001cfcf7600",
+       "vout": 0
+     },
+     "descendants": [
+       "36fbb099e6de59d23477727e3199c65caae35ded957660f56fc681a6d81d5570",
+       "5b59ce35093fbd13549cd6f203d4b5b01762d70e75b8e9733dfc463e0ff8cc13"
+     ]
+   }
+
+blockchain.transaction.dsproof.list
+===================================
+
+List all of the transactions that currently have double-spend proofs associated
+with them.
+
+**Signature**
+
+  .. function:: blockchain.transaction.dsproof.list()
+  .. versionadded:: 1.4.5
+
+**Result**
+
+  A JSON array of hexadecimal strings. May be empty.  Each string is a
+  transaction hash of an in-mempool transaction that has a double-spend proof
+  associated with it. Each of the hashes appearing in the list may be given as
+  an argument to :func:`blockchain.transaction.dsproof.get` in order to obtain
+  the associated double-spend proof for that transaction.
+
+**Example Results**::
+
+   [
+     "e67cc122f3c28a4243c3a1b14b38a9474c22ba928af9a194ca2b85426f0fd1bb",
+     "077f0cc2439f2e48567c72eeeba5a447f8649c00c3d18ab6516eccfd4119726f",
+     "ccc2f0d90b7067a83566024d4df842f0b6cb8180e18d642fcc85cae8acadbd58"
+   ]
+
+blockchain.transaction.dsproof.subscribe
+========================================
+
+Subscribe for :ref:`dsproof <dsproofs>` notifications for a transaction.
+
+**Signature**
+
+  .. function:: blockchain.transaction.dsproof.subscribe(tx_hash)
+  .. versionadded:: 1.4.5
+
+  *tx_hash*
+
+    The transaction hash as a hexadecimal string.
+
+**Result**
+
+  A result identical to what one would get from :func:`blockchain.transaction.dsproof.get`.
+
+**Notifications**
+
+  The client will receive a notification when the :ref:`dsproof <dsproofs>`  status
+  of the transaction changes.  Its signature is
+
+    .. function:: blockchain.transction.dsproof.subscribe(tx_hash, dsproof)
+       :noindex:
+
+       With *dsproof* being identical to what one would get from invoking
+       :func:`blockchain.transaction.dsproof.get` for that particular *tx_hash*.
+
+blockchain.transaction.dsproof.unsubscribe
+==========================================
+
+Unsubscribe from receiving any further :ref:`dsproof <dsproofs>` notifications
+for a transaction.
+
+**Signature**
+
+  .. function:: blockchain.transaction.dsproof.unsubscribe(tx_hash)
+  .. versionadded:: 1.4.5
+
+  *tx_hash*
+
+    The transaction hash as a hexadecimal string.
+
+**Result**
+
+  Returns :const:`true` if the transaction was previously subscribed-to for
+  dsproof notifications, otherwise :const:`false`. Note that :const:`false`
+  might be returned even for something subscribed-to earlier, because the server
+  can drop subscriptions in rare circumstances.
+
+
 blockchain.transaction.get
 ==========================
 
@@ -845,6 +961,8 @@ and, optionally, its height.
 **Signature**
 
   .. function:: blockchain.transaction.get_merkle(tx_hash, [height])
+  .. versionchanged:: 1.4.5
+     *height* is no longer required and is now optional
 
   *tx_hash*
 
@@ -1166,6 +1284,8 @@ Return a list of features and services supported by the server.
   .. function:: server.features()
   .. versionchanged:: 1.4.2
      *hosts* key is no longer required, but recommended.
+  .. versionchanged:: 1.4.5
+     *dsproof* key added (optional).
 
 **Result**
 
@@ -1244,6 +1364,13 @@ Return a list of features and services supported by the server.
     A server should ignore information provided about any host other
     than the one it connected to.
 
+  * *dsproof*
+
+    A boolean value. If present and set to :const:`true`, then the server
+    has :ref:`double-spend proof <dsproofs>` support, and it supports the
+    :const:`blockchain.transaction.dsproof.*` set of RPC methods. If this key
+    is missing or :const:`false`, then the server does not support :ref:`dsproofs <dsproofs>`.
+
 
 **Example Result**
 
@@ -1256,7 +1383,8 @@ Return a list of features and services supported by the server.
       "protocol_min": "1.4.3",
       "pruning": null,
       "server_version": "Fulcrum 1.0.5",
-      "hash_function": "sha256"
+      "hash_function": "sha256",
+      "dsproof": true
   }
 
 
