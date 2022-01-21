@@ -5,21 +5,32 @@ Message Stream
 --------------
 
 Clients and servers communicate using **JSON RPC** over an unspecified underlying stream
-transport.  Examples include TCP and SSL (with WS and WSS support planned for the future).
+transport.  Examples include TCP, SSL, WS and WSS.
 
 Two standards `JSON RPC 1.0
 <http://www.jsonrpc.org/specification_v1>`_ and `JSON RPC 2.0
 <http://www.jsonrpc.org/specification>`_ are specified; use of version
 2.0 is encouraged but not required.  Server support of batch requests
-is *not implemented* in Fulcrum.
+*is* implemented in Fulcrum as of version 1.6.0.
 
-.. note:: A client or server should only indicate JSON RPC 2.0 by
-  setting the `jsonrpc
-  <http://www.jsonrpc.org/specification#request_object>`_ member of
+.. note::
+  A client or server should only indicate JSON RPC 2.0 by
+  setting the `jsonrpc <http://www.jsonrpc.org/specification#request_object>`_ member of
   its messages to ``"2.0"`` if it supports the version 2.0 protocol in
   its entirety.  Fulcrum does and will expect clients advertizing so
   to function correctly.  Those that do not will be disconnected and
   possibly blacklisted.
+
+  Additionally, Fulcrum imposes the following constraints on JSON RPC messages:
+
+  - JSON-RPC `id` fields must not be JSON numerics with fractional parts.  In other
+    words they should be a string, integer, or `null`.  JSON-RPC messages containing a
+    floating point number in the `id` field will be rejected.
+  - JSON-RPC batching is supported as of Fulcrum version 1.6.0 with some caveats. Namely,
+    duplicate `id` values within a batch are rejected. Additionally, all active
+    batches from a client that are not yet replied-to by the server must have
+    unique `id` values.  Finally, `id` values within a batch request may not be `null`,
+    they must either be a unique JSON string or a non-fractional numeric.
 
 For the TCP and SSL transports: Each RPC call MUST be delimited by a single newline.
 The JSON specification does not permit control characters within strings, so no
@@ -27,13 +38,15 @@ confusion is possible there.  However it does permit newlines as extraneous
 whitespace between elements; client and server MUST NOT use newlines in such a
 way.
 
+For the WS and WSS transports: Newline delimiters between requests are not required,
+since this transport has message-level framing.
+
 A server advertising support for a particular protocol version MUST
 support each method documented for that protocol version, unless the
 method is explicitly marked optional.  It may support other methods or
-additional parameters with unspecified behaviour.  Use of additional
+additional parameters with unspecified behavior.  Use of additional
 parameters is discouraged as it may conflict with future versions of
 the protocol.
-
 
 Notifications
 -------------
