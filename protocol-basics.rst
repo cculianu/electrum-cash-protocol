@@ -10,7 +10,7 @@ transport.  Examples include TCP, SSL, WS and WSS.
 Two standards `JSON RPC 1.0
 <http://www.jsonrpc.org/specification_v1>`_ and `JSON RPC 2.0
 <http://www.jsonrpc.org/specification>`_ are specified; use of version
-2.0 is encouraged but not required.  Server support of batch requests
+2.0 is encouraged but not required.  Server support for batch requests
 *is* implemented in Fulcrum as of version 1.6.0.
 
 .. note::
@@ -26,11 +26,6 @@ Two standards `JSON RPC 1.0
   - JSON-RPC `id` fields must not be JSON numerics with fractional parts.  In other
     words they should be a string, integer, or `null`.  JSON-RPC messages containing a
     floating point number in the `id` field will be rejected.
-  - JSON-RPC batching is supported as of Fulcrum version 1.6.0 with some caveats. Namely,
-    duplicate `id` values within a batch are rejected. Additionally, all active
-    batches from a client that are not yet replied-to by the server must have
-    unique `id` values.  Finally, `id` values within a batch request may not be `null`,
-    they must either be a unique JSON string or a non-fractional numeric.
 
 For the TCP and SSL transports: Each RPC call MUST be delimited by a single newline.
 The JSON specification does not permit control characters within strings, so no
