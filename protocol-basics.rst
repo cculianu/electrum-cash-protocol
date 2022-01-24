@@ -21,11 +21,9 @@ Two standards `JSON RPC 1.0
   to function correctly.  Those that do not will be disconnected and
   possibly blacklisted.
 
-  Additionally, Fulcrum imposes the following constraints on JSON RPC messages:
-
-  - JSON-RPC `id` fields must not be JSON numerics with fractional parts.  In other
-    words they should be a string, integer, or `null`.  JSON-RPC messages containing a
-    floating point number in the `id` field will be rejected.
+  Additionally, Fulcrum imposes the following constraint on JSON RPC messages: JSON-RPC `id` fields must not be JSON
+  numerics with fractional parts. In other words they should be a string, integer, or `null`. JSON-RPC messages
+  containing a floating point number in the `id` field will be rejected.
 
 For the TCP and SSL transports: Each RPC call MUST be delimited by a single newline.
 The JSON specification does not permit control characters within strings, so no
