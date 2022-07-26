@@ -228,20 +228,3 @@ New methods
     double-spent.
   * :func:`blockchain.transaction.dsproof.unsubscribe` to unsubscribe from
     receiving dsproof notifications for a particular transaction.
-
-Version 1.4.6
-=============
-
-New methods
------------
-
-  * :func:`blockchain.scripthash.transactions.subscribe` to retrieve the
-    notifications about new transactions involving a scripthash arriving
-    into the mempool.
-  * :func:`blockchain.scripthash.transactions.unsubscribe` to unsubscribe from a
-    previous subscription.
-  * :func:`blockchain.address.transactions.subscribe` to retrieve the
-    notifications about new transactions involving a cashaddr arriving
-    into the mempool.
-  * :func:`blockchain.address.transactions.unsubscribe` to unsubscribe from a
-    previous subscription.

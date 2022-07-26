@@ -190,63 +190,6 @@ its :ref:`status <status>` changes.
   subscribed-to earlier, because the server can drop subscriptions in rare
   circumstances.
 
-blockchain.address.transactions.subscribe
-============================
-
-Subscribe to transactions arriving into the mempool which involve a particular
-Bitcoin Cash address.
-
-**Signature**
-
-  .. function:: blockchain.address.transactions.subscribe(address)
-  .. versionadded:: 1.4.6
-
-  *address*
-
-    The address as a Cash Address string (with or without prefix, case
-    insensitive). Some server implementations do not support Legacy (base58)
-    addresses and are not required to do so by this specification. However,
-    Fulcrum does support both Legacy and Cash Address encodings.
-
-**Result**
-
-  The hash of the latest transaction involving this address.
-
-**Notifications**
-
-  The client will receive a notification with address and hashes of new transactions
-  since last mempool synchronization. Its signature is
-
-  .. function:: blockchain.address.transactions.subscribe(address, [tx_hash])
-     :noindex:
-
-  .. note:: See the notes in the blockchain.address.subscribe section
-
-blockchain.address.unsubscribe
-=================================
-
-Unsubscribe from transactions arriving into the mempool which involve a particular
-Bitcoin Cash address.
-
-**Signature**
-
-  .. function:: blockchain.address.transactions.unsubscribe(address)
-  .. versionadded:: 1.4.6
-
-  *address*
-
-    The address as a Cash Address string (with or without prefix, case
-    insensitive). Some server implementations do not support Legacy (base58)
-    addresses and are not required to do so by this specification. However,
-    Fulcrum does support both Legacy and Cash Address encodings.
-
-**Result**
-
-  Returns :const:`true` if the address was previously subscribed-to, otherwise
-  :const:`false`. Note that :const:`false` might be returned even for something
-  subscribed-to earlier, because the server can drop subscriptions in rare
-  circumstances.
-
 blockchain.block.header
 =======================
 
@@ -731,56 +674,6 @@ Unsubscribe from a script hash, preventing future notifications if its :ref:`sta
 
   .. function:: blockchain.scripthash.unsubscribe(scripthash)
   .. versionadded:: 1.4.2
-
-  *scripthash*
-
-    The script hash as a hexadecimal string.
-
-**Result**
-
-  Returns :const:`true` if the scripthash was previously subscribed-to, otherwise
-  :const:`false`. Note that :const:`false` might be returned even for something
-  subscribed-to earlier, because the server can drop subscriptions in rare
-  circumstances.
-
-blockchain.scripthash.transactions.subscribe
-===============================
-
-Subscribe to transactions arriving into the mempool which involve a particular
-scripthash.
-
-**Signature**
-
-  .. function:: blockchain.scripthash.transactions.subscribe(scripthash)
-  .. versionadded:: 1.4.6
-
-  *scripthash*
-
-    The script hash as a hexadecimal string.
-
-**Result**
-
-  The hash of the latest transaction involving this scripthash.
-
-**Notifications**
-
-  The client will receive a notification with scripthash and hashes of new transactions
-  since last mempool synchronization. Its signature is
-
-  .. function:: blockchain.scripthash.transactions.subscribe(scripthash, [tx_hash])
-     :noindex:
-
-
-blockchain.scripthash.transactions.unsubscribe
-=================================
-
-Unsubscribe from transactions arriving into the mempool which involve a particular
-scripthash.
-
-**Signature**
-
-  .. function:: blockchain.scripthash.transactions.unsubscribe(scripthash)
-  .. versionadded:: 1.4.6
 
   *scripthash*
 
