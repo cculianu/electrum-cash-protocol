@@ -216,7 +216,7 @@ unless there is a reorg). Double-spend proofs indicate that a transaction may
 not confirm as expected, and that instead there is a risk that its conflicting
 transaction will confirm instead.
 
-`The specification for dsproofs can be found here <https://gitlab.com/-/snippets/1883331>`_.
+`The specification for dsproofs can be found here <https://documentation.cash/protocol/network/messages/dsproof-beta>`_.
 
 In Fulcrum, the dsproofs are returned as JSON objects with the following keys:
 
