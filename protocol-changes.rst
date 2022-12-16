@@ -247,3 +247,10 @@ Changes
     in its results.
   * :func:`blockchain.utxo.get_info` may return an additional key, :ref:`token_data <token_data>`,
     in its results.
+
+New methods
+-----------
+
+  * :func:`blockchain.headers.get_tip` to retrieve the latest height and header
+    known to the server.
+  * :func:`blockchain.headers.unsubscribe` to unsubscribe from header notifications.

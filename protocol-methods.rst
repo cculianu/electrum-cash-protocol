@@ -21,7 +21,7 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
     addresses and are not required to do so by this specification. However,
     Fulcrum does support both Legacy and Cash Address encodings.
 
-  * *token_filter* (New in 1.4.6, optional, BCH only)
+  * *token_filter* (optional, BCH only)
 
     A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
     :const:`"tokens_only"`. This controls whether the balance also includes
@@ -123,7 +123,7 @@ Return an ordered list of UTXOs sent to a Bitcoin Cash address.
     addresses and are not required to do so by this specification. However,
     Fulcrum does support both Legacy and Cash Address encodings.
 
-  *token_filter* (New in 1.4.6, optional, BCH only)
+  *token_filter* (optional, BCH only)
 
     A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
     :const:`"tokens_only"`. This controls whether the results also include
@@ -392,6 +392,35 @@ be confirmed within a certain number of blocks.
 
   0.00101079
 
+blockchain.headers.get_tip
+==========================
+
+Get the latest block's height and header.
+
+**Signature**
+
+  .. function:: blockchain.headers.get_tip()
+
+**Result**
+
+  The height and header of the current block chain tip.  The result is a dictionary with two members:
+
+  * *height*
+
+    The height of the header, an integer.
+
+  * *hex*
+
+    The binary header as a hexadecimal string.
+
+**Example Result**
+
+::
+
+   {
+     "height": 520481,
+     "hex": "00000020890208a0ae3a3892aa047c5468725846577cfcd9b512b50000000000000000005dc2b02f2d297a9064ee103036c14d678f9afc7e3d9409cf53fd58b82e938e8ecbeca05a2d2103188ce804c4"
+   }
 
 blockchain.headers.subscribe
 ============================
@@ -404,15 +433,15 @@ Subscribe to receive block headers when a new block is found.
 
 **Result**
 
-  The header of the current block chain tip.  The result is a dictionary with two members:
-
-  * *hex*
-
-    The binary header as a hexadecimal string.
+  The height and header of the current block chain tip.  The result is a dictionary with two members:
 
   * *height*
 
     The height of the header, an integer.
+
+  * *hex*
+
+    The binary header as a hexadecimal string.
 
 **Example Result**
 
@@ -446,6 +475,21 @@ Subscribe to receive block headers when a new block is found.
   to figure out the common ancestor block and request any missing
   block headers to acquire a consistent view of the chain state.
 
+blockchain.headers.unsubscribe
+==============================
+
+Undoes the effects of a previous call to :func:`blockchain.headers.subscribe`,
+that is to say: unsubscribe from receiving block header notifications.
+
+**Signature**
+
+  .. function:: blockchain.headers.unsubscribe()
+  .. versionadded:: 1.4.6
+
+**Result**
+
+  Returns :const:`true` if the client was previously subscribed to
+  receive block header notifications, otherwise :const:`false`.
 
 blockchain.relayfee
 ===================
@@ -489,7 +533,7 @@ Return the confirmed and unconfirmed balances of a :ref:`script hash
 
     The script hash as a hexadecimal string.
 
-  *token_filter* (New in 1.4.6, optional, BCH only)
+  *token_filter* (optional, BCH only)
 
     A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
     :const:`"tokens_only"`. This controls whether the balance also includes
@@ -644,7 +688,7 @@ Return an ordered list of UTXOs sent to a script hash.
 
     The script hash as a hexadecimal string.
 
-  *token_filter* (New in 1.4.6, optional, BCH only)
+  *token_filter* (optional, BCH only)
 
     A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
     :const:`"tokens_only"`. This controls whether the results also include
@@ -668,7 +712,7 @@ Return an ordered list of UTXOs sent to a script hash.
     The integer height of the block the transaction was confirmed in.
     ``0`` if the transaction is in the mempool.
 
-  * *token_data* (optional in 1.4.6 or above on BCH only)
+  * *token_data* (optional, BCH only)
 
     A dictionary encapsulating the :ref:`CashToken data <token_data>` for this
     output. This key will be missing from the dictionary if the unspent output
@@ -1257,7 +1301,7 @@ Return information for an unspent transaction output.
     The output's destination :ref:`script hash <script hashes>` as a hexadecimal
     string.
 
-  * *token_data* (optional in 1.4.6 or above on BCH only)
+  * *token_data* (optional, BCH only)
 
     A dictionary encapsulating the :ref:`CashToken data <token_data>` for this
     output. This key will be missing from the dictionary if the unspent output
