@@ -9,8 +9,10 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
 
 **Signature**
 
-  .. function:: blockchain.address.get_balance(address)
+  .. function:: blockchain.address.get_balance(address, [token_filter])
   .. versionadded:: 1.4.3
+  .. versionchanged:: 1.4.6
+     Added optional arg: *token_filter* (BCH only)
 
   * *address*
 
@@ -18,6 +20,17 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
     insensitive). Some server implementations do not support Legacy (base58)
     addresses and are not required to do so by this specification. However,
     Fulcrum does support both Legacy and Cash Address encodings.
+
+  * *token_filter* (New in 1.4.6, optional, BCH only)
+
+    A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
+    :const:`"tokens_only"`. This controls whether the balance also includes
+    :ref:`CashToken <cashtokens>`-containing UTXOs, whether to exclude them, or whether to return
+    the balance for :ref:`CashToken <cashtokens>` UTXOs only, respectively.
+
+    The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
+    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    or above, the default is :const:`"include_tokens"`.
 
 **Result**
 
@@ -97,15 +110,29 @@ Return an ordered list of UTXOs sent to a Bitcoin Cash address.
 
 **Signature**
 
-  .. function:: blockchain.address.listunspent(address)
+  .. function:: blockchain.address.listunspent(address, [token_filter])
   .. versionadded:: 1.4.3
+  .. versionchanged:: 1.4.6
+     Added optional arg: *token_filter* (BCH only).
+     *token_data* may appear in the result object if the UTXO contains a :ref:`CashToken <cashtokens>` (BCH only).
 
-  * *address*
+  *address*
 
     The address as a Cash Address string (with or without prefix, case
     insensitive). Some server implementations do not support Legacy (base58)
     addresses and are not required to do so by this specification. However,
     Fulcrum does support both Legacy and Cash Address encodings.
+
+  *token_filter* (New in 1.4.6, optional, BCH only)
+
+    A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
+    :const:`"tokens_only"`. This controls whether the results also include
+    :ref:`CashToken <cashtokens>`-containing UTXOs, whether to exclude them,
+    or whether to return :ref:`CashToken <cashtokens>` UTXOs only, respectively.
+
+    The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
+    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    or above, the default is :const:`"include_tokens"`.
 
 **Result**
 
@@ -453,17 +480,32 @@ Return the confirmed and unconfirmed balances of a :ref:`script hash
 
 **Signature**
 
-  .. function:: blockchain.scripthash.get_balance(scripthash)
+  .. function:: blockchain.scripthash.get_balance(scripthash, [token_filter])
   .. versionadded:: 1.1
+  .. versionchanged:: 1.4.6
+     Added optional arg: *token_filter* (BCH only)
 
   *scripthash*
 
     The script hash as a hexadecimal string.
 
+  *token_filter* (New in 1.4.6, optional, BCH only)
+
+    A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
+    :const:`"tokens_only"`. This controls whether the balance also includes
+    :ref:`CashToken <cashtokens>`-containing UTXOs, whether to exclude them, or whether to return
+    the balance for :ref:`CashToken <cashtokens>` UTXOs only, respectively.
+
+    The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
+    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    or above, the default is :const:`"include_tokens"`.
+
 **Result**
 
   A dictionary with keys `confirmed` and `unconfirmed`.  The value of
-  each is the appropriate balance in satoshis.
+  each is the appropriate balance in satoshis. Note that on BCH, be sure to
+  select the appropriate `token_filter` argument to retrieve the balance
+  either including or omitting tokens or for tokens only.
 
 **Result Example**
 
@@ -503,6 +545,10 @@ Return the confirmed and unconfirmed history of a :ref:`script hash
   * *tx_hash*
 
     The transaction hash in hexadecimal.
+
+  Note that as of Fulcrum 1.8.0 the transaction history for a script hash
+  also includes transactions that involve sending/receiving :ref:`CashTokens <cashtokens>`
+  to/from that script hash.
 
   See :func:`blockchain.scripthash.get_mempool` for how mempool
   transactions are returned.
@@ -564,6 +610,10 @@ hashes>`.
 
     The transaction fee in minimum coin units (satoshis).
 
+  Note that as of Fulcrum 1.8.0 the mempool transactions for a script hash
+  also include transactions that involve sending/receiving :ref:`CashTokens <cashtokens>`
+  to/from that script hash.
+
 **Result Example**
 
 ::
@@ -584,12 +634,26 @@ Return an ordered list of UTXOs sent to a script hash.
 
 **Signature**
 
-  .. function:: blockchain.scripthash.listunspent(scripthash)
+  .. function:: blockchain.scripthash.listunspent(scripthash, [token_filter])
   .. versionadded:: 1.1
+  .. versionchanged:: 1.4.6
+     Added optional arg: *token_filter* (BCH only).
+     *token_data* may appear in the result object if the UTXO contains a :ref:`CashToken <cashtokens>` (BCH only).
 
   *scripthash*
 
     The script hash as a hexadecimal string.
+
+  *token_filter* (New in 1.4.6, optional, BCH only)
+
+    A string, one of: :const:`"include_tokens"`, :const:`"exclude_tokens"` or
+    :const:`"tokens_only"`. This controls whether the results also include
+    :ref:`CashToken <cashtokens>`-containing UTXOs, whether to exclude them,
+    or whether to return :ref:`CashToken <cashtokens>` UTXOs only, respectively.
+
+    The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
+    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    or above, the default is :const:`"include_tokens"`.
 
 **Result**
 
@@ -603,6 +667,12 @@ Return an ordered list of UTXOs sent to a script hash.
 
     The integer height of the block the transaction was confirmed in.
     ``0`` if the transaction is in the mempool.
+
+  * *token_data* (optional in 1.4.6 or above on BCH only)
+
+    A dictionary encapsulating the :ref:`CashToken data <token_data>` for this
+    output. This key will be missing from the dictionary if the unspent output
+    does not have any token data on it.
 
   * *tx_pos*
 
@@ -623,16 +693,36 @@ Return an ordered list of UTXOs sent to a script hash.
 
   [
     {
-      "tx_pos": 0,
-      "value": 45318048,
+      "height": 37146,
       "tx_hash": "9f2c45a12db0144909b5db269415f7319179105982ac70ed80d76ea79d923ebf",
-      "height": 437146
+      "tx_pos": 0,
+      "value": 45318048
     },
     {
-      "tx_pos": 0,
-      "value": 919195,
+      "height": 41696,
       "tx_hash": "3d2290c93436a3e964cfc2f0950174d8847b1fbe3946432c4784e168da0f019f",
-      "height": 441696
+      "tx_pos": 0,
+      "value": 919195
+    },
+    {
+      "height": 126184,
+      "token_data": {
+        "amount": "1000000",
+        "category": "8fd6a2f713beaa5907a776b8b3060cddd1c6ff0588554c2364698ae271321ce9",
+        "nft": {
+          "capability": "minting",
+          "commitment": "f00fd00fb33f"
+         }
+      },
+      "tx_hash": "87489c43bae69c297bbaf65276573b0001c20c647a3d54d2842a4425ff87bacc",
+      "tx_pos": 1,
+      "value": 1000000
+    },
+    {
+      "height": 0,
+      "tx_hash": "42f83727115dc7e38b1311aae9c516d9956c16f6017149c9d4a98cc5e738952a",
+      "tx_pos": 7,
+      "value": 99999815
     }
   ]
 
@@ -1139,6 +1229,8 @@ Return information for an unspent transaction output.
 
   .. function:: blockchain.utxo.get_info(tx_hash, out_n)
   .. versionadded:: 1.4.4
+  .. versionchanged:: 1.4.6
+     *token_data* may appear in the result object if the UTXO contains a :ref:`CashToken <cashtokens>` (BCH only)
 
   *tx_hash*
 
@@ -1165,6 +1257,12 @@ Return information for an unspent transaction output.
     The output's destination :ref:`script hash <script hashes>` as a hexadecimal
     string.
 
+  * *token_data* (optional in 1.4.6 or above on BCH only)
+
+    A dictionary encapsulating the :ref:`CashToken data <token_data>` for this
+    output. This key will be missing from the dictionary if the unspent output
+    does not have any token data on it.
+
   * *value*
 
     The output's value in integer minimum coin units (satoshis).
@@ -1178,6 +1276,23 @@ Return information for an unspent transaction output.
      "scripthash": "1c1e184c97abc87626c497b95f755df1025f48b9c27d037ea335677c57f38e5c",
      "value": 45318048
    }
+
+On 1.4.6 or above, for a token-containing output on BCH::
+
+   {
+     "confirmed_height": 126184,
+     "scripthash": "726205b2b758bd656b400cf5356fdec733528e93fc5f0a578592ab862539f327",
+     "token_data": {
+       "amount": "1000000",
+       "category": "8fd6a2f713beaa5907a776b8b3060cddd1c6ff0588554c2364698ae271321ce9",
+       "nft": {
+         "capability": "minting",
+         "commitment": "f00fd00fb33f"
+       }
+     },
+     "value": 1000000
+   }
+
 
 mempool.get_fee_histogram
 =========================
@@ -1286,6 +1401,8 @@ Return a list of features and services supported by the server.
      *hosts* key is no longer required, but recommended.
   .. versionchanged:: 1.4.5
      *dsproof* key added (optional).
+  .. versionchanged:: 1.4.6
+     *cashtokens* key added (optional).
 
 **Result**
 
@@ -1371,6 +1488,14 @@ Return a list of features and services supported by the server.
     :const:`blockchain.transaction.dsproof.*` set of RPC methods. If this key
     is missing or :const:`false`, then the server does not support :ref:`dsproofs <dsproofs>`.
 
+  * *cashtokens*
+
+    A boolean value. If present and set to :const:`true`, then the server
+    has :ref:`CashToken <cashtokens>` support, and it may return additional
+    :ref:`token_data <token_data>` in UTXO-related results from some of its
+    RPC methods. If this key is missing or :const:`false`, then the server does
+    not support :ref:`CashTokens <cashtokens>`.
+
 
 **Example Result**
 
@@ -1379,12 +1504,13 @@ Return a list of features and services supported by the server.
   {
       "genesis_hash": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
       "hosts": {"14.3.140.101": {"tcp_port": 51001, "ssl_port": 51002}},
-      "protocol_max": "1.4",
-      "protocol_min": "1.4.3",
+      "protocol_max": "1.4.6",
+      "protocol_min": "1.4",
       "pruning": null,
-      "server_version": "Fulcrum 1.0.5",
+      "server_version": "Fulcrum 1.9.0",
       "hash_function": "sha256",
-      "dsproof": true
+      "dsproof": true,
+      "cashtokens": true
   }
 
 
@@ -1476,8 +1602,8 @@ Only the first :func:`server.version` message is accepted.
 
 **Example**::
 
-  server.version("Electron Cash 3.3.6", ["1.2", "1.4"])
+  server.version("Electron Cash 4.2.12", ["1.4", "1.4.5"])
 
 **Example Result**::
 
-  ["Fulcrum 1.0.5", "1.4"]
+  ["Fulcrum 1.9.0", "1.4.5"]

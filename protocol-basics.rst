@@ -52,6 +52,8 @@ notification (and their names) are given in the documentation of the
 method.
 
 
+.. _version negotiation:
+
 Version Negotiation
 -------------------
 
@@ -160,6 +162,10 @@ inputs are confirmed.
 4. The :dfn:`status` of the script hash is the :func:`sha256` hash of the
 full string expressed as a hexadecimal string, or :const:`null` if the
 string is empty because there are no transactions.
+
+Note that as of Fulcrum 1.8.0 the transaction history for a script hash
+also includes transactions that involve sending/receiving :ref:`CashTokens <cashtokens>`
+to/from that script hash.
 
 
 Block Headers
@@ -272,3 +278,76 @@ are capable of reporting double-spend proofs via RPC, and thus only such servers
 will provide double-spend proofs to clients via the Electrum Cash protocol.
 Servers that support `dsproof` will have the key :const:`"dsproof"` set to
 :const:`true` in their :func:`server.features` map.
+
+
+.. _cashtokens:
+
+CashToken Support
+-----------------
+
+As of Fulcrum 1.8.0, transactions containing CashToken inputs and output are
+understood and indexed correctly.  This means that the token data is correctly
+parsed out of the transaction locking scripts and is separated out from the
+actual destination for the output.  So calls like :func:`blockchain.scripthash.get_history`
+may return results including transactions that touch token data for a particular
+address.
+
+Additionally, as of Fulcrum 1.9.0 (protocol version 1.4.6), CashToken data may
+be returned from some RPCs as an optional key :const:`token_data`. The following RPCs may
+return results containing this key:  :func:`blockchain.address.listunspent`,
+:func:`blockchain.scripthash.listunspent`, and :func:`blockchain.utxo.get_info`.
+
+Servers that return :const:`token_data` in their results will have the key
+:const:`"cashtokens"` set to :const:`true` in their :func:`server.features` map.
+
+.. _token_data:
+
+The :const:`token_data` JSON object has the following keys:
+
+  * **amount**
+
+    A JSON string representing the fungible token quantity for this token output.
+    The reason a string is used here is because tokens have a maximum amount of 2^63
+    whereas JSON numerics support up to 2^53. Thus, the amount cannot be a JSON numeric
+    and is instead written as a decimal string in the JSON output.
+
+  * **category**
+
+    A JSON hex string representing 32-byte token category (or token id), in big endian
+    (reversed) byte order. Note that on the blockchain token categories are serialized
+    in little endian byte order (this is similar to how transaction ids work).
+
+  * **nft** (optional)
+
+    A JSON object representing a single non-fungible token.  This key may be missing if
+    this CashToken only contains fungible tokens and no NFTs.  The keys inside this object
+    are as follows:
+
+    * **capability**
+
+      A JSON string, one of: :const:`"none"`, :const:`"mutable"`, or :const:`"minting"`.
+
+    * **commitment**
+
+      A JSON hex string representing the NFT's commitment data. Unlike :const:`category` above
+      this is not in any reversed order and is in the same order as it would appear on
+      the blockchain.
+
+An example of a :func:`blockchain.scripthash.listunspent` result containing :const:`token_data`::
+
+    [
+      {
+        "height": 126184,
+        "token_data": {
+          "amount": "1000000",
+          "category": "8fd6a2f713beaa5907a776b8b3060cddd1c6ff0588554c2364698ae271321ce9",
+          "nft": {
+            "capability": "minting",
+            "commitment": "f00fd00fb33f"
+           }
+        },
+        "tx_hash": "87489c43bae69c297bbaf65276573b0001c20c647a3d54d2842a4425ff87bacc",
+        "tx_pos": 1,
+        "value": 1000000
+        }
+    ]

@@ -228,3 +228,22 @@ New methods
     double-spent.
   * :func:`blockchain.transaction.dsproof.unsubscribe` to unsubscribe from
     receiving dsproof notifications for a particular transaction.
+
+Version 1.4.6
+=============
+
+Changes
+-------
+
+  * :func:`blockchain.address.get_balance` now takes an optional second argument,
+    *token_filter*.
+  * :func:`blockchain.address.listunspent` now takes an optional second argument,
+    *token_filter*. It may also now return an additional key, :ref:`token_data <token_data>`,
+    in its results.
+  * :func:`blockchain.scripthash.get_balance` now takes an optional second argument,
+    *token_filter*.
+  * :func:`blockchain.scripthash.listunspent` now takes an optional second argument,
+    *token_filter*. It may also now return an additional key, :ref:`token_data <token_data>`,
+    in its results.
+  * :func:`blockchain.utxo.get_info` may return an additional key, :ref:`token_data <token_data>`,
+    in its results.
