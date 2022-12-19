@@ -11,7 +11,7 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
 
   .. function:: blockchain.address.get_balance(address, [token_filter])
   .. versionadded:: 1.4.3
-  .. versionchanged:: 1.4.6
+  .. versionchanged:: 1.5.0
      Added optional arg: *token_filter* (BCH only)
 
   * *address*
@@ -29,7 +29,7 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
     the balance for :ref:`CashToken <cashtokens>` UTXOs only, respectively.
 
     The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
-    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    `1.4.x` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.5.0`
     or above, the default is :const:`"include_tokens"`.
 
 **Result**
@@ -112,7 +112,7 @@ Return an ordered list of UTXOs sent to a Bitcoin Cash address.
 
   .. function:: blockchain.address.listunspent(address, [token_filter])
   .. versionadded:: 1.4.3
-  .. versionchanged:: 1.4.6
+  .. versionchanged:: 1.5.0
      Added optional arg: *token_filter* (BCH only).
      *token_data* may appear in the result object if the UTXO contains a :ref:`CashToken <cashtokens>` (BCH only).
 
@@ -131,7 +131,7 @@ Return an ordered list of UTXOs sent to a Bitcoin Cash address.
     or whether to return :ref:`CashToken <cashtokens>` UTXOs only, respectively.
 
     The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
-    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    `1.4.x` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.5.0`
     or above, the default is :const:`"include_tokens"`.
 
 **Result**
@@ -484,7 +484,7 @@ that is to say: unsubscribe from receiving block header notifications.
 **Signature**
 
   .. function:: blockchain.headers.unsubscribe()
-  .. versionadded:: 1.4.6
+  .. versionadded:: 1.5.0
 
 **Result**
 
@@ -526,7 +526,7 @@ Return the confirmed and unconfirmed balances of a :ref:`script hash
 
   .. function:: blockchain.scripthash.get_balance(scripthash, [token_filter])
   .. versionadded:: 1.1
-  .. versionchanged:: 1.4.6
+  .. versionchanged:: 1.5.0
      Added optional arg: *token_filter* (BCH only)
 
   *scripthash*
@@ -541,7 +541,7 @@ Return the confirmed and unconfirmed balances of a :ref:`script hash
     the balance for :ref:`CashToken <cashtokens>` UTXOs only, respectively.
 
     The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
-    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    `1.4.x` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.5.0`
     or above, the default is :const:`"include_tokens"`.
 
 **Result**
@@ -680,7 +680,7 @@ Return an ordered list of UTXOs sent to a script hash.
 
   .. function:: blockchain.scripthash.listunspent(scripthash, [token_filter])
   .. versionadded:: 1.1
-  .. versionchanged:: 1.4.6
+  .. versionchanged:: 1.5.0
      Added optional arg: *token_filter* (BCH only).
      *token_data* may appear in the result object if the UTXO contains a :ref:`CashToken <cashtokens>` (BCH only).
 
@@ -696,7 +696,7 @@ Return an ordered list of UTXOs sent to a script hash.
     or whether to return :ref:`CashToken <cashtokens>` UTXOs only, respectively.
 
     The default is :const:`"exclude_tokens"` if the client :ref:`negotiated version <version negotiation>`
-    `1.4.5` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.4.6`
+    `1.4.x` or below with the server. If the client :ref:`negotiated version <version negotiation>` `1.5.0`
     or above, the default is :const:`"include_tokens"`.
 
 **Result**
@@ -1273,7 +1273,7 @@ Return information for an unspent transaction output.
 
   .. function:: blockchain.utxo.get_info(tx_hash, out_n)
   .. versionadded:: 1.4.4
-  .. versionchanged:: 1.4.6
+  .. versionchanged:: 1.5.0
      *token_data* may appear in the result object if the UTXO contains a :ref:`CashToken <cashtokens>` (BCH only)
 
   *tx_hash*
@@ -1321,7 +1321,7 @@ Return information for an unspent transaction output.
      "value": 45318048
    }
 
-On 1.4.6 or above, for a token-containing output on BCH::
+On 1.5.0 or above, for a token-containing output on BCH::
 
    {
      "confirmed_height": 126184,
@@ -1445,7 +1445,7 @@ Return a list of features and services supported by the server.
      *hosts* key is no longer required, but recommended.
   .. versionchanged:: 1.4.5
      *dsproof* key added (optional).
-  .. versionchanged:: 1.4.6
+  .. versionchanged:: 1.5.0
      *cashtokens* key added (optional).
 
 **Result**
@@ -1548,7 +1548,7 @@ Return a list of features and services supported by the server.
   {
       "genesis_hash": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
       "hosts": {"14.3.140.101": {"tcp_port": 51001, "ssl_port": 51002}},
-      "protocol_max": "1.4.6",
+      "protocol_max": "1.5",
       "protocol_min": "1.4",
       "pruning": null,
       "server_version": "Fulcrum 1.9.0",

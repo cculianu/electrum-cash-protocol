@@ -292,7 +292,7 @@ actual destination for the output.  So calls like :func:`blockchain.scripthash.g
 may return results including transactions that touch token data for a particular
 address.
 
-Additionally, as of Fulcrum 1.9.0 (protocol version 1.4.6), CashToken data may
+Additionally, as of Fulcrum 1.9.0 (protocol version 1.5.0), CashToken data may
 be returned from some RPCs as an optional key :const:`token_data`. The following RPCs may
 return results containing this key:  :func:`blockchain.address.listunspent`,
 :func:`blockchain.scripthash.listunspent`, and :func:`blockchain.utxo.get_info`.

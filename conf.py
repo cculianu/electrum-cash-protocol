@@ -15,7 +15,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-VERSION="Fulcrum Protocol Reference 1.4.6"
+VERSION="Fulcrum Protocol Reference 1.5.0"
 
 # -- Project information -----------------------------------------------------
 

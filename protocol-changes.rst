@@ -229,7 +229,7 @@ New methods
   * :func:`blockchain.transaction.dsproof.unsubscribe` to unsubscribe from
     receiving dsproof notifications for a particular transaction.
 
-Version 1.4.6
+Version 1.5.0
 =============
 
 Changes
