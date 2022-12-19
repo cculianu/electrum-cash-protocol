@@ -400,6 +400,7 @@ Get the latest block's height and header.
 **Signature**
 
   .. function:: blockchain.headers.get_tip()
+  .. versionadded:: 1.5.0
 
 **Result**
 
