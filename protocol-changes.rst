@@ -254,3 +254,12 @@ New methods
   * :func:`blockchain.headers.get_tip` to retrieve the latest height and header
     known to the server.
   * :func:`blockchain.headers.unsubscribe` to unsubscribe from header notifications.
+
+Version 1.5.1
+=============
+
+Changes
+-------
+
+  * :func:`blockchain.scripthash.get_history` and :func:`blockchain.address.get_history` changed to
+    allow pagination of long histories.

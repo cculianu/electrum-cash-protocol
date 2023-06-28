@@ -43,8 +43,10 @@ Return the confirmed and unconfirmed history of a Bitcoin Cash address.
 
 **Signature**
 
-  .. function:: blockchain.address.get_history(address)
+  .. function:: blockchain.address.get_history(address, from_height=0, to_height=-1)
   .. versionadded:: 1.4.3
+  .. versionchanged:: 1.5.1
+     Allow pagination of history (added from_height, to_height)
 
   * *address*
 
@@ -52,6 +54,20 @@ Return the confirmed and unconfirmed history of a Bitcoin Cash address.
     insensitive). Some server implementations do not support Legacy (base58)
     addresses and are not required to do so by this specification. However,
     Fulcrum does support both Legacy and Cash Address encodings.
+
+  * *from_height*
+
+    The first block height (inclusive) of the interval the client is interested in.
+    A non-negative integer. Optional.
+
+  * *to_height*
+
+    The last block height (exclusive) of the interval the client is interested in.
+    A non-negative integer, or ``-1``. Optional. A value of ``-1`` means that the interval
+    extends to the chaintip and also includes unconfirmed/mempool transactions
+    (otherwise mempool txs are not included).
+    ``from_height <= to_height`` must hold (for the purposes of this inequality
+    and others here, treat a value of ``-1`` as infinity).
 
 **Result**
 
@@ -569,19 +585,35 @@ Return the confirmed and unconfirmed history of a :ref:`script hash
 
 **Signature**
 
-  .. function:: blockchain.scripthash.get_history(scripthash)
+  .. function:: blockchain.scripthash.get_history(scripthash, from_height=0, to_height=-1)
   .. versionadded:: 1.1
+  .. versionchanged:: 1.5.1
+     Allow pagination of history (added from_height, to_height)
 
   *scripthash*
 
     The script hash as a hexadecimal string.
 
+  *from_height*
+
+    The first block height (inclusive) of the interval the client is interested in.
+    A non-negative integer. Optional.
+
+  *to_height*
+
+    The last block height (exclusive) of the interval the client is interested in.
+    A non-negative integer, or ``-1``. Optional. A value of ``-1`` means that the interval
+    extends to the chaintip and also includes unconfirmed/mempool transactions
+    (otherwise mempool txs are not included).
+    ``from_height <= to_height`` must hold (for the purposes of this inequality
+    and others here, treat a value of ``-1`` as infinity).
+
 **Result**
 
   A list of confirmed transactions in blockchain order, with the
   output of :func:`blockchain.scripthash.get_mempool` appended to the
-  list.  Each confirmed transaction is a dictionary with the following
-  keys:
+  list (mempool is appended only if ``to_height`` is ``-1``).  Each confirmed transaction
+  is a dictionary with the following keys:
 
   * *height*
 
