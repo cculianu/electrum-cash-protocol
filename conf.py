@@ -15,12 +15,12 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-VERSION="Fulcrum Protocol Reference 1.5.0"
+VERSION="Fulcrum Protocol Reference 1.5.1"
 
 # -- Project information -----------------------------------------------------
 
 project = 'Electrum Cash Protocol'
-copyright = '2016-2019, Neil Booth, 2020-2022, Calin Culianu'
+copyright = '2016-2019, Neil Booth, 2020-2023, Calin Culianu'
 author = 'Neil Booth, Calin Culianu, Electrum Cash protocol devs'
 
 # The full version including branding
@@ -160,6 +160,6 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'Fulcrum', 'Fulcrum Documentation',
-     author, 'Fulcrum', 'A Fast & Numble Bitcoin Cash SPV Server.',
+     author, 'Fulcrum', 'A Fast & Numble BCH, BTC, & LTC SPV Server.',
      'Finance'),
 ]
