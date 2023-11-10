@@ -263,3 +263,16 @@ Changes
 
   * :func:`blockchain.scripthash.get_history` and :func:`blockchain.address.get_history` changed to
     allow pagination of long histories.
+
+Version 1.5.2
+=============
+
+New methods
+-----------
+
+* :func:`blockchain.header.get` to retrieve a block header by its hash.
+* :func:`blockchain.scripthash.get_first_use` and :func:`blockchain.address.get_first_use` to retrieve
+  the first occurrence of a script hash or address on the block chain.
+* :func:`blockchain.transaction.get_confirmed_blockhash` to retrieve the block hash of the block that
+  contains a particular transaction.
+* :func:`daemon.passthrough` to forward RPC requests directly through to the bitcoin daemon (disabled by default).

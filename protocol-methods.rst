@@ -36,6 +36,28 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
 
   See :func:`blockchain.scripthash.get_balance`.
 
+blockchain.scripthash.get_first_use
+===================================
+
+Retrieve information on the first occurrence of a Bitcoin Cash address on the
+block chain.
+
+**Signature**
+
+  .. function:: blockchain.address.get_first_use(address)
+  .. versionadded:: 1.5.2
+
+  *address*
+
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
+
+**Result**
+
+  As for :func:`blockchain.scripthash.get_first_use`.
+
 blockchain.address.get_history
 ==============================
 
@@ -408,6 +430,45 @@ be confirmed within a certain number of blocks.
 
   0.00101079
 
+
+blockchain.header.get
+=====================
+
+Retrieve a block header by its hash (or, optionally, its height).
+
+**Signature**
+
+  .. function:: blockchain.header.get(block_hash)
+  .. versionadded:: 1.5.2
+
+  *block_hash*
+
+    A 64-character hexadecimal string indicating the block hash of the block for
+    which to retrieve the header.  Optionally, this can also be a numeric value
+    and in that case it will be interpreted as a block height.
+
+**Result**
+
+  The height and header of the requested block.  The result is a dictionary with two keys:
+
+  * *height*
+
+    The height of the header, an integer.
+
+  * *hex*
+
+    The binary header as a hexadecimal string.
+
+**Example Result**
+
+::
+
+   {
+     "height": 520481,
+     "hex": "00000020890208a0ae3a3892aa047c5468725846577cfcd9b512b50000000000000000005dc2b02f2d297a9064ee103036c14d678f9afc7e3d9409cf53fd58b82e938e8ecbeca05a2d2103188ce804c4"
+   }
+
+
 blockchain.headers.get_tip
 ==========================
 
@@ -576,6 +637,73 @@ Return the confirmed and unconfirmed balances of a :ref:`script hash
     "confirmed": 103873966,
     "unconfirmed": 236844
   }
+
+blockchain.scripthash.get_first_use
+===================================
+
+Retrieve information on the first occurrence of a :ref:`script hash <script hashes>` on the
+block chain.
+
+**Note**: On block chians such as BTC that use natural ordering, the first occurrence
+of any :ref:`script hash <script hashes>` will always be it appearing in an output of a transaction
+(since an address must receive funds before it can spend them). For block chains such as Bitcoin Cash,
+this is not always the case due to CTOR (txid based sorting of block transactions).
+
+**Signature**
+
+  .. function:: blockchain.scripthash.get_first_use(scripthash)
+  .. versionadded:: 1.5.2
+
+  *scripthash*
+
+    The :ref:`script hash <script hashes>` as a hexadecimal string.
+
+**Result**
+
+  If the :ref:`script hash <script hashes>` in question does not appear either on the block chain or in the
+  mempool, then :const:`null` is returned. Otherwise, a dictionary containing the following keys:
+
+  * *block_hash*
+
+    The block hash of the block where this :ref:`script hash <script hashes>` first appears, as a hexadecimal string.
+    If this :ref:`script hash <script hashes>` first appears in the mempool, then this will be all zeroes, e.g. 64
+    hexadecimal :const:`0` digits.
+
+  * *height*
+
+    The integer height of the block where this :ref:`script hash <script hashes>` first appears. If this
+    :ref:`script hash <script hashes>` first appears in the mempool, then this will be :const:`0`.
+
+    **Note**: Unlike other protocol methods (such as :func:`blockchain.scripthash.get_mempool`),
+    :const:`0` is always used here for any mempool transaction irrespective of whether it has any unconfirmed parents or not.
+
+  * *tx_hash*
+
+    The transaction hash where this :ref:`script hash <script hashes>` first appears, in hexadecimal.
+
+    **Note**: For multiple mempool transactions referencing the same :ref:`script hash <script hashes>`, an unspecified
+    transaction will be arbitrarily chosen and it may not always be the first one that appeared in the mempool for this
+    :ref:`script hash <script hashes>`.
+
+**Result Examples**
+
+::
+
+  {
+    "block_hash": "000000000000032e1219acd8cdda073f5cbb42a216fede788ad4b555e7969a26",
+    "height": 200004,
+    "tx_hash": "acc3758bd2a26f869fcc67d48ff30b96464d476bca82c1cd6656e7d506816412"
+  }
+
+::
+
+  {
+    "block_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "height": 0,
+    "tx_hash": "9fbed79a1e970343fcd39f4a2d830a6bde6de0754ed2da70f489d0303ed558ec"
+  }
+
+
 
 blockchain.scripthash.get_history
 =================================
@@ -1088,6 +1216,58 @@ When *verbose* is :const:`true`::
                                 "type": "pubkeyhash"},
               "value": 0.1360904}]}
 
+blockchain.transaction.get_confirmed_blockhash
+==============================================
+
+Returns the block hash of the block that contains a particular transaction.
+
+**Signature**
+
+  .. function:: blockchain.transaction.get_confirmed_blockhash(tx_hash, include_header=false)
+  .. versionadded:: 1.5.2
+
+  *tx_hash*
+
+    The transaction hash as a hexadecimal string.
+
+  *include_header*
+
+    Whether to also return the block header in the results dictionary (default :const:`false` if unspecified).
+
+**Result**
+
+  If this transaction is unknown or is in the mempool, a JSON-RPC error result will be returned. If
+  the transaction is confirmed in a block, a dictionary will be returned with the following keys:
+
+  * *block_hash*
+
+    The block hash as a hexadecimal string.
+
+  * *block_header* (optional, only if :const:`include_header=true`)
+
+    The binary block header as a hexadecimal string.
+
+  * *block_height*
+
+    The integer height of the block the transaction was confirmed in.
+
+**Result Examples**
+
+::
+
+  {
+    "block_hash": "0000000000000000000058ae65224f518d755d99afd512536c81dee2359dbcdb",
+    "block_height": 816182
+  }
+
+::
+
+  {
+    "block_hash": "00000000000000000001522da9f02d2707dd91139f32a89d515e537384ecf2b1",
+    "block_header": "00400020780506d9aeaf379e2c61f7e4b1c14c55dfb88c844581000000000000000000004818be123cf187c2eed198bc8eeed8b83c896d50b31948a625153c337a6c126aca454e65948104173ae18f28",
+    "block_height": 816153
+  }
+
 blockchain.transaction.get_height
 =================================
 
@@ -1369,6 +1549,63 @@ On 1.5.0 or above, for a token-containing output on BCH::
      },
      "value": 1000000
    }
+
+
+daemon.passthrough
+==================
+
+Invokes an RPC method on the bitcoin daemon's own RPC server, and returns the
+result.
+
+**Signature**
+
+  .. function:: daemon.passthrough(dictionary)
+  .. versionadded:: 1.5.2
+
+  *dictionary*
+
+    Unlike other Electrum Cash protocol methods, which accept a JSON-RPC array
+    as positional arguments, this RPC requires a dictionary under the JSON-RPC
+    :const:`"params"` key for the request.  The contents of this dictionary is
+    itself a nested JSON-RPC pseudo-request, of the form:
+    :const:`{"method": "...", "params": [...]}`
+
+**Note**
+
+  This method is not available by default on most servers and must be
+  explicitly enabled by the server admin, since it allows for any client to
+  call into the bitcoind RPC in an unrestricted fashion, which is not secure
+  nor safe to do for a public network. It is only documented here for advanced
+  usages of the server for private networks wishing to use this method.
+
+**Result**
+
+  The JSON-RPC :const:`"result"` that was returned by the demon is sent back to the
+  client verbatim.
+
+**Example**
+
+::
+
+    --> Client sends:
+    {
+      "id": 1,
+      "method":
+      "daemon.passthrough",
+      "params": {
+        "method": "getdsproofscore",
+        "params": [
+          "d3aac244e46f4bc5e2140a07496a179624b42d12600bfeafc358154ec89a720c"
+        ]
+      }
+    }
+
+    <-- Client receives:
+    {
+      "id": 1,
+      "jsonrpc": "2.0",
+      "result": 1.0
+    }
 
 
 mempool.get_fee_histogram
