@@ -1590,8 +1590,7 @@ result.
     --> Client sends:
     {
       "id": 1,
-      "method":
-      "daemon.passthrough",
+      "method": "daemon.passthrough",
       "params": {
         "method": "getdsproofscore",
         "params": [
