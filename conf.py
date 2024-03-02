@@ -20,7 +20,7 @@ VERSION="Fulcrum Protocol Reference 1.5.1"
 # -- Project information -----------------------------------------------------
 
 project = 'Electrum Cash Protocol'
-copyright = '2016-2019, Neil Booth, 2020-2023, Calin Culianu'
+copyright = '2016-2019, Neil Booth, 2020-2024, Calin Culianu'
 author = 'Neil Booth, Calin Culianu, Electrum Cash protocol devs'
 
 # The full version including branding
