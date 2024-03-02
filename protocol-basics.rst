@@ -364,7 +364,7 @@ transactions matching a certain RPA prefix value. For a discussion of what RPA p
 and in particular the section discussing `receiving on-chain via prefix searching <https://github.com/imaginaryusername/Reusable_specs/blob/master/reusable_addresses.md#receiving-onchain-direct>`_
 
 In Fulcrum, the RPA-related APIs such as :func:`blockchain.rpa.get_history` take an :const:`rpa_prefix` argument, which
-is a 1-4 character hexadecimal string that represents the first four bytes of the double sha256 hash of a transaction's
+is a 1-4 character hexadecimal string that represents the first two bytes of the double sha256 hash of a transaction's
 serialized input. So for example if the transaction's input serialized and hashed to this value::
 
     abcd740485f380ff6379d11ef6fe7d7cdd68aea7f8bd0d953d9fdf3531fb7d53
