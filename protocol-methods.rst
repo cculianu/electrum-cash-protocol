@@ -594,6 +594,168 @@ be accepted to the daemon's memory pool.
 
    0.0
 
+
+blockchain.reusable.get_history
+=================================
+
+Return the confirmed transactions for an :ref:`rpa_prefix <rpa prefix>`.
+
+**Deprecated**
+
+  This function is provided for compatibility with existing clients. Please use :func:`blockchain.rpa.get_history` in new code instead.
+
+**Signature**
+
+  .. function:: blockchain.reusable.get_history(from_height, count, rpa_prefix)
+  .. versionadded:: 1.5.3
+
+**Availability**
+
+  Only provided by servers that advertise as having the RPA index enabled. That is, servers that have the :const:`"rpa"`
+  key present in their :func:`server.features` dictionary.
+
+
+blockchain.reusable.get_mempool
+=================================
+
+Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefix>`.
+
+**Deprecated**
+
+  This function is provided for compatibility with existing clients. Please use :func:`blockchain.rpa.get_mempool` in new code instead.
+
+**Signature**
+
+  .. function:: blockchain.reusable.get_mempool(rpa_prefix)
+  .. versionadded:: 1.5.3
+
+**Availability**
+
+  Only provided by servers that advertise as having the RPA index enabled. That is, servers that have the :const:`"rpa"`
+  key present in their :func:`server.features` dictionary.
+
+
+blockchain.rpa.get_history
+=================================
+
+Return the confirmed history of an :ref:`rpa_prefix <rpa prefix>`.
+
+**Signature**
+
+  .. function:: blockchain.rpa.get_history(rpa_prefix, from_height, to_height=-1)
+  .. versionadded:: 1.5.3
+
+  *rpa_prefix*
+
+    The RPA prefix for which to scan for history, as a hexadecimal string, e.g. :const:`"ff"` or :const:`"ab"` or :const:`"abc"`.
+    Note that this prefix must respect the server's :func:`server.features` :const:`prefix_bits_min` (default: :const:`8`), so if the
+    server is configured with :const:`8`, then :const:`"ff"` will work but :const:`"f"` will not, however if it is configured with :const:`4`, then :const:`"f"`
+    (a single nybble as a prefix) will work.
+
+  *from_height*
+
+    The first block height (inclusive) of the interval the client is interested in. A non-negative integer.
+
+  *to_height*
+
+    The last block height (exclusive) of the interval the client is interested in.
+    A non-negative integer, or :const:`-1`. Optional. A value of :const:`-1` means that the interval
+    extends to the chaintip, or up to the server's :func:`server.features` :const:`history_block_limit` (default: 60), whichever
+    is less. :const:`from_height <= to_height` must hold (for the purposes of this inequality and others here, treat a
+    value of :const:`-1` as infinity).
+
+**Availability**
+
+  Only provided by servers that advertise as having the RPA index enabled. That is, servers that have the :const:`"rpa"`
+  key present in their :func:`server.features` dictionary.
+
+**Result**
+
+  A list of confirmed transactions in blockchain order. Note that unlike :func:`blockchain.scripthash.get_history`,
+  no mempool transactions are ever returned by this call. For mempool RPA transactions, use :func:`blockchain.rpa.get_mempool`.
+  Each confirmed transaction is a dictionary with the following keys:
+
+  * *height*
+
+    The integer height of the block the transaction was confirmed in.
+
+  * *tx_hash*
+
+    The transaction hash in hexadecimal.
+
+**Result Examples**
+
+::
+
+  [
+    {
+      "height": 825000,
+      "tx_hash": "acc3758bd2a26f869fcc67d48ff30b96464d476bca82c1cd6656e7d506816412"
+    },
+    {
+      "height": 825008,
+      "tx_hash": "f3e1bf48975b8d6060a9de8884296abb80be618dc00ae3cb2f6cee3085e09403"
+    }
+  ]
+
+
+blockchain.rpa.get_mempool
+=================================
+
+Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefix>`.
+
+**Signature**
+
+  .. function:: blockchain.rpa.get_mempool(rpa_prefix)
+  .. versionadded:: 1.5.3
+
+  *rpa_prefix*
+
+    The RPA prefix for which to scan for mempool transactions, as a hexadecimal string, e.g. :const:`"ff"` or :const:`"ab"` or :const:`"abc"`.
+    Note that this prefix must respect the server's :func:`server.features` :const:`prefix_bits_min` (default: :const:`8`), so if the
+    server is configured with :const:`8`, then :const:`"ff"` will work but :const:`"f"` will not, however if it is configured with :const:`4`, then :const:`"f"`
+    (a single nybble as a prefix) will work.
+
+**Availability**
+
+  Only provided by servers that advertise as having the RPA index enabled. That is, servers that have the :const:`"rpa"`
+  key present in their :func:`server.features` dictionary.
+
+**Result**
+
+  A list of unconfirmed transactions in arbitrary order. Each unconfirmed transaction is a dictionary with the following keys:
+
+  * *height*
+
+    :const:`0` for transactions with no unconfirmed parents, :const:`-1` for transactions that have unconfirmed parents in the mempool.
+
+  * *tx_hash*
+
+    The transaction hash in hexadecimal.
+
+  * *fee*
+
+    The transaction fee in minimum coin units (satoshis).
+
+
+**Result Example**
+
+::
+
+  [
+    {
+      "tx_hash": "45381031132c57b2ff1cbe8d8d3920cf9ed25efd9a0beb764bdb2f24c7d1c7e3",
+      "height": 0,
+      "fee": 24310
+    },
+    {
+      "tx_hash": "354a24a255488c28c9cdfe7134d1b86bb99bbcca2bc7996b9613990bed384cc8",
+      "height": -1,
+      "fee": 185
+    }
+  ]
+
+
 blockchain.scripthash.get_balance
 =================================
 
@@ -1716,6 +1878,8 @@ Return a list of features and services supported by the server.
      *dsproof* key added (optional).
   .. versionchanged:: 1.5.0
      *cashtokens* key added (optional).
+  .. versionchanged:: 1.5.3
+     *rpa* key added (optional).
 
 **Result**
 
@@ -1809,6 +1973,42 @@ Return a list of features and services supported by the server.
     RPC methods. If this key is missing or :const:`false`, then the server does
     not support :ref:`CashTokens <cashtokens>`.
 
+  * *rpa*
+
+    An optional dictionary. If present and not :const:`null`, it indicates that the server
+    supports the reusable payment address RPCs such as :func:`blockchain.rpa.get_history`.
+    The keys in the dictionary have the following meanings:
+
+    * *history_block_limit*
+
+      Server configured limit on the number of blocks one can request to scan in a single
+      :func:`blockchain.rpa.get_history` (or deprecated :func:`blockchain.reusable.get_history`)
+      RPC call. The server will not scan more blocks than this value for any individual request
+      and results will be truncated to respect this limit.
+
+    * *max_history*
+
+      Server configured limit on the maximum number of elements one can receive in one
+      :func:`blockchain.rpa.get_history` (or deprecated :func:`blockchain.reusable.get_history`)
+      RPC call. The server will not return a JSON array exceeding this number of items, and it may
+      truncate results to this limit or return nothing at all for requests that would produce
+      results exceeeding this limit.
+
+    * *prefix_bits*
+
+      The number of bits that are indexed for :ref:`rpa_prefix <rpa prefix>` searching. Requests cannot specify an
+      :ref:`rpa_prefix <rpa prefix>` with bit-length longer than this limit.
+
+    * *prefix_bits_min*
+
+      The minimum number of bits that clients can specify when searching by prefix in calls such as
+      :func:`blockchain.rpa.get_history`.  Requests cannot specify an :ref:`rpa_prefix <rpa prefix>` with bit-length
+      smaller than this value.
+
+    * *starting_height*
+
+      The first block height which is indexed by this server for RPA-related RPC calls. Prefix searching of blocks
+      before this height will always yield empty results.
 
 **Example Result**
 
@@ -1817,13 +2017,20 @@ Return a list of features and services supported by the server.
   {
       "genesis_hash": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
       "hosts": {"14.3.140.101": {"tcp_port": 51001, "ssl_port": 51002}},
-      "protocol_max": "1.5",
+      "protocol_max": "1.5.3",
       "protocol_min": "1.4",
       "pruning": null,
-      "server_version": "Fulcrum 1.9.0",
+      "server_version": "Fulcrum 1.10.0",
       "hash_function": "sha256",
       "dsproof": true,
-      "cashtokens": true
+      "cashtokens": true,
+      "rpa": {
+          "history_block_limit": 60,
+          "max_history": 125000,
+          "prefix_bits": 16,
+          "prefix_bits_min": 8,
+          "starting_height" :825000
+      }
   }
 
 

@@ -351,3 +351,23 @@ An example of a :func:`blockchain.scripthash.listunspent` result containing :con
         "value": 1000000
         }
     ]
+
+
+.. _rpa prefix:
+
+RPA Prefix Search Support
+-------------------------
+
+Fulcrum supports the RPA (reusable payment address) indexing scheme. Some RPC methods are provided to search for
+transactions matching a certain RPA prefix value. For a discussion of what RPA prefixes are, please consult the
+`Reusable Payment Address Specification <https://github.com/imaginaryusername/Reusable_specs/blob/master/reusable_addresses.md>`_
+and in particular the section discussing `receiving on-chain via prefix searching <https://github.com/imaginaryusername/Reusable_specs/blob/master/reusable_addresses.md#receiving-onchain-direct>`_
+
+In Fulcrum, the RPA-related APIs such as :func:`blockchain.rpa.get_history` take an :const:`rpa_prefix` argument, which
+is a 1-4 character hexadecimal string that represents the first four bytes of the double sha256 hash of a transaction's
+serialized input. So for example if the transaction's input serialized and hashed to this value::
+
+    abcd740485f380ff6379d11ef6fe7d7cdd68aea7f8bd0d953d9fdf3531fb7d53
+
+Then possible prefixes would be either: :const:`"a"` (4 bit prefix of the above hash), :const:`"ab"` (8 bit prefix of the above hash),
+:const:`"abc"` (12 bit prefix of the above hash), or :const:`"abcd"` (16 bit prefix of the above hash).

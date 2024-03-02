@@ -276,3 +276,13 @@ New methods
 * :func:`blockchain.transaction.get_confirmed_blockhash` to retrieve the block hash of the block that
   contains a particular transaction.
 * :func:`daemon.passthrough` to forward RPC requests directly through to the bitcoin daemon (disabled by default).
+
+Version 1.5.3
+=============
+
+New methods
+-----------
+
+* :func:`blockchain.rpa.get_history` and :func:`blockchain.rpa.get_mempool` to retrieve transactions matching a certain RPA (reusable payment address) prefix.
+* :func:`blockchain.reusable.get_history` and :func:`blockchain.reusable.get_mempool` which are compatibility-versions of the above for legacy clients.
+* :func:`server.features` added a new optional key, :const:`"rpa"`.
