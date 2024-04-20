@@ -36,7 +36,7 @@ Return the confirmed and unconfirmed balances of a Bitcoin Cash address.
 
   See :func:`blockchain.scripthash.get_balance`.
 
-blockchain.scripthash.get_first_use
+blockchain.address.get_first_use
 ===================================
 
 Retrieve information on the first occurrence of a Bitcoin Cash address on the
