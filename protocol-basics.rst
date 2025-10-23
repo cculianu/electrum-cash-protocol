@@ -154,7 +154,7 @@ block)
 
   * ``height`` is the height of the block it is in.
 
-3. Next, with mempool transactions in any order, append a similar
+3. Next, with mempool transactions in :ref:`a specified order <mempoolorder>`, append a similar
 string for those transactions, but where **height** is ``-1`` if the
 transaction has at least one unconfirmed input, and ``0`` if all
 inputs are confirmed.
@@ -378,13 +378,17 @@ Then possible prefixes would be either: :const:`"a"` (4 bit prefix of the above 
 Mempool Transaction Ordering
 ----------------------------
 
-Certain methods, such as :func:`blockchain.scripthash.get_mempool` and :func:`blockchain.scripthash.get_history` may
-return a list of transactions from the mempool. The mempool ordering in this protocol is specified as follows: they are
-sorted in ascending order using the following pseudo-code comparator function (where :const:`a` and :const:`b` are
+The protocol specifies a specific ordering for mempool transactions. This ordering is not necessarily topological
+ordering, but is something simpler. The mempool ordering in this protocol is specified as follows: mempool transactions
+are sorted in ascending order using the following pseudo-code comparator function (where :const:`a` and :const:`b` are
 transactions to be compared)::
 
     (a.hasUnconfirmedParents, a.txHash) < (b.hasUnconfirmedParents, b.txHash)
 
 That is, transactions are sorted such that all transactions with no unconfirmed parents appear as a grouping before
-all transactions with unconfirmed parents, and within each grouping, they are sorted by their transaction hash
-(as a string).
+all transactions with unconfirmed parents, and within each grouping, they are sorted by their transaction hash (as a
+string).
+
+Certain concepts in the protocol such as the :ref:`status hash <status>` make use of this ordering. Additionally,
+certain methods, such as :func:`blockchain.scripthash.get_mempool` and :func:`blockchain.scripthash.get_history` may
+return a list of transactions from the mempool in this order.
