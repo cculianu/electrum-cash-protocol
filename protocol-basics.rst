@@ -371,3 +371,20 @@ serialized input. So for example if the transaction's input serialized and hashe
 
 Then possible prefixes would be either: :const:`"a"` (4 bit prefix of the above hash), :const:`"ab"` (8 bit prefix of the above hash),
 :const:`"abc"` (12 bit prefix of the above hash), or :const:`"abcd"` (16 bit prefix of the above hash).
+
+
+.. _mempoolorder:
+
+Mempool Transaction Ordering
+----------------------------
+
+Certain methods, such as :func:`blockchain.scripthash.get_mempool` and :func:`blockchain.scripthash.get_history` may
+return a list of transactions from the mempool. The mempool ordering in this protocol is specified as follows: they are
+sorted in ascending order using the following pseudo-code comparator function (where :const:`a` and :const:`b` are
+transactions to be compared)::
+
+    (a.hasUnconfirmedParents, a.txHash) < (b.hasUnconfirmedParents, b.txHash)
+
+That is, transactions are sorted such that all transactions with no unconfirmed parents appear as a grouping before
+all transactions with unconfirmed parents, and within each grouping, they are sorted by their transaction hash
+(as a string).

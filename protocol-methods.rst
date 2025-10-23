@@ -412,11 +412,20 @@ be confirmed within a certain number of blocks.
 
 **Signature**
 
-  .. function:: blockchain.estimatefee(number)
+  .. function:: blockchain.estimatefee(number, [mode])
+  .. versionchanged:: 1.6.0
+     Added optional arg: *mode* (BTC and LTC only)
 
   *number*
 
     The number of blocks to target for confirmation.
+
+  *mode* (optional, BTC & LTC only)
+
+    If the remote bitcoind supports this argument, the estimation mode to use, as a string. This string is
+    daemon-specific, but for example on BTC and LTC if can be one of: :const:`"unset"`, :const:`"economical"`,
+    :const:`"conservative"`. If unspecified, the default for the remote bitcoind is used (usually:
+    :const:`"conservative"`).
 
 **Result**
 
@@ -962,7 +971,7 @@ hashes>`.
 
 **Result**
 
-  A list of mempool transactions in arbitrary order.  Each mempool
+  A list of mempool transactions in a :ref:`specified order <mempoolorder>`.  Each mempool
   transaction is a dictionary with the following keys:
 
   * *height*
@@ -1798,6 +1807,44 @@ pool, weighted by transaction size.
   ::
 
     [[12, 128812], [4, 92524], [2, 6478638], [1, 22890421]]
+
+
+mempool.get_info
+================
+
+Returns a dictionary containing various mempool stats obtained from the bitcoin daemon's :const:`"getmempoolinfo"` RPC.
+
+**Signature**
+
+  .. function:: mempool.get_info()
+  .. versionadded:: 1.6
+
+**Result**
+
+  The response is a dictionary that contains daemon-specific values. The following keys *may* be found in the response:
+  :const:`"mempoolminfee"`, :const:`"minrelaytxfee"`, :const:`"incrementalrelayfee"`, :const:`"unbroadcastcount"`,
+  and :const:`"fullrbf"`. However, on BCH for example, some of the preceding keys may be be missing altogether since the
+  bitcoin daemon does have the same BTC-specific mempool concepts related to fees and as a result does not provide
+  some of these keys via the :const:`"getmempoolinfo"` RPC.
+
+**Example Result**
+
+  ::
+
+   // On BCH's Bitcoin Cash Node:
+   {
+     "mempoolminfee": 0.00001000,
+     "minrelaytxfee": 0.00001000
+   }
+
+   // On BTC's Bitcoin Core:
+   {
+     "mempoolminfee": 0.00001000,
+     "minrelaytxfee": 0.00001000,
+     "incrementalrelayfee": 0.00001000,
+     "unbroadcastcount": 5,
+     "fullrbf": true
+   }
 
 
 server.add_peer

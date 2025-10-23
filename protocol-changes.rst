@@ -286,3 +286,16 @@ New methods
 * :func:`blockchain.rpa.get_history` and :func:`blockchain.rpa.get_mempool` to retrieve transactions matching a certain RPA (reusable payment address) prefix.
 * :func:`blockchain.reusable.get_history` and :func:`blockchain.reusable.get_mempool` which are compatibility-versions of the above for legacy clients.
 * :func:`server.features` added a new optional key, :const:`"rpa"`.
+
+Version 1.6.0
+=============
+
+Changes
+-------
+
+* :func:`blockchain.estimatefee` changed to allow for an optional second argument, :const:`"mode"`.
+
+New methods
+-----------
+
+* :func:`mempool.get_info` to retrieve mempool statistics as reported by the bitcoin daemon.
