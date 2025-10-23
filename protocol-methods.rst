@@ -104,6 +104,8 @@ Return the unconfirmed transactions of a Bitcoin Cash address.
 
   .. function:: blockchain.address.get_mempool(address)
   .. versionadded:: 1.4.3
+  .. versionchanged:: 1.6
+     results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   * *address*
 
@@ -581,8 +583,15 @@ that is to say: unsubscribe from receiving block header notifications.
 blockchain.relayfee
 ===================
 
-Return the minimum fee a low-priority transaction must pay in order to
-be accepted to the daemon's memory pool.
+Feerates lower than this are considered zero fee and are not being relayed to
+the bitcoin network by the server. This feerate does not guarantee acceptance
+into the mempool of the server. To get an accurate idea of the current dynamic
+minimum relay fee, use the :func:`mempool.get_info` method instead.
+
+**Deprecated**
+
+  This function is provided for compatibility with existing clients. Please use :func:`mempool.get_info` in new code
+  instead.
 
 **Signature**
 
@@ -590,7 +599,7 @@ be accepted to the daemon's memory pool.
 
 **Result**
 
-  The fee in whole coin units (BTC, not satoshis for Bitcoin) as a
+  The fee in whole coin units (BTC/BCH/LTC units, not satoshis for Bitcoin) as a
   floating point number.
 
 **Example Results**
@@ -637,6 +646,8 @@ Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefi
 
   .. function:: blockchain.reusable.get_mempool(rpa_prefix)
   .. versionadded:: 1.5.3
+  .. versionchanged:: 1.6
+     results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
 **Availability**
 
@@ -717,6 +728,8 @@ Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefi
 
   .. function:: blockchain.rpa.get_mempool(rpa_prefix)
   .. versionadded:: 1.5.3
+  .. versionchanged:: 1.6
+     results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   *rpa_prefix*
 
@@ -732,7 +745,8 @@ Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefi
 
 **Result**
 
-  A list of unconfirmed transactions in arbitrary order. Each unconfirmed transaction is a dictionary with the following keys:
+  A list of unconfirmed transactions in a :ref:`specified order <mempoolorder>`. Each unconfirmed transaction is a
+  dictionary with the following keys:
 
   * *height*
 
@@ -964,6 +978,8 @@ hashes>`.
 
   .. function:: blockchain.scripthash.get_mempool(scripthash)
   .. versionadded:: 1.1
+  .. versionchanged:: 1.6
+     results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   *scripthash*
 
@@ -1826,6 +1842,12 @@ Returns a dictionary containing various mempool stats obtained from the bitcoin 
   and :const:`"fullrbf"`. However, on BCH for example, some of the preceding keys may be be missing altogether since the
   bitcoin daemon does have the same BTC-specific mempool concepts related to fees and as a result does not provide
   some of these keys via the :const:`"getmempoolinfo"` RPC.
+
+  Of note is the following key:
+
+  * :const:`"mempoolminfee"`
+      * Type: floating point number
+      * Value: Dynamic minimum fee rate (in BCH/kB, BTC/kvB, or LTC/kvB) for a tx to be accepted given current conditions.
 
 **Example Result**
 

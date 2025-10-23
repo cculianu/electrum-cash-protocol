@@ -270,12 +270,12 @@ Version 1.5.2
 New methods
 -----------
 
-* :func:`blockchain.header.get` to retrieve a block header by its hash.
-* :func:`blockchain.scripthash.get_first_use` and :func:`blockchain.address.get_first_use` to retrieve
-  the first occurrence of a script hash or address on the block chain.
-* :func:`blockchain.transaction.get_confirmed_blockhash` to retrieve the block hash of the block that
-  contains a particular transaction.
-* :func:`daemon.passthrough` to forward RPC requests directly through to the bitcoin daemon (disabled by default).
+  * :func:`blockchain.header.get` to retrieve a block header by its hash.
+  * :func:`blockchain.scripthash.get_first_use` and :func:`blockchain.address.get_first_use` to retrieve
+    the first occurrence of a script hash or address on the block chain.
+  * :func:`blockchain.transaction.get_confirmed_blockhash` to retrieve the block hash of the block that
+    contains a particular transaction.
+  * :func:`daemon.passthrough` to forward RPC requests directly through to the bitcoin daemon (disabled by default).
 
 Version 1.5.3
 =============
@@ -283,9 +283,9 @@ Version 1.5.3
 New methods
 -----------
 
-* :func:`blockchain.rpa.get_history` and :func:`blockchain.rpa.get_mempool` to retrieve transactions matching a certain RPA (reusable payment address) prefix.
-* :func:`blockchain.reusable.get_history` and :func:`blockchain.reusable.get_mempool` which are compatibility-versions of the above for legacy clients.
-* :func:`server.features` added a new optional key, :const:`"rpa"`.
+  * :func:`blockchain.rpa.get_history` and :func:`blockchain.rpa.get_mempool` to retrieve transactions matching a certain RPA (reusable payment address) prefix.
+  * :func:`blockchain.reusable.get_history` and :func:`blockchain.reusable.get_mempool` which are compatibility-versions of the above for legacy clients.
+  * :func:`server.features` added a new optional key, :const:`"rpa"`.
 
 Version 1.6.0
 =============
@@ -293,9 +293,17 @@ Version 1.6.0
 Changes
 -------
 
-* :func:`blockchain.estimatefee` changed to allow for an optional second argument, :const:`"mode"`.
+  * :func:`blockchain.estimatefee` changed to allow for an optional second argument, :const:`"mode"`.
+  * :func:`blockchain.scripthash.get_mempool` previously did not define an order for mempool transactions. We now
+    mandate a :ref:`specific ordering <mempoolorder>`.
 
 New methods
 -----------
 
-* :func:`mempool.get_info` to retrieve mempool statistics as reported by the bitcoin daemon.
+  * :func:`mempool.get_info` to get more detailed and general relayfee info.
+
+Deprecated methods
+------------------
+
+  * :func:`blockchain.relayfee`. Switch to :func:`mempool.get_info`.
+

@@ -154,7 +154,7 @@ block)
 
   * ``height`` is the height of the block it is in.
 
-3. Next, with mempool transactions in :ref:`a specified order <mempoolorder>`, append a similar
+3. Next, with mempool transactions in a :ref:`specified order <mempoolorder>`, append a similar
 string for those transactions, but where **height** is ``-1`` if the
 transaction has at least one unconfirmed input, and ``0`` if all
 inputs are confirmed.
