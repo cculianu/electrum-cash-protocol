@@ -2,7 +2,7 @@
 Protocol Changes
 ================
 
-This documents lists changes made by protocol version.
+This document lists changes made by protocol version.
 
 Version 1.0
 ===========
@@ -150,18 +150,6 @@ Removed methods
 Version 1.4.1
 =============
 
-Changes
--------
-
-  * :func:`blockchain.block.header` and :func:`blockchain.block.headers` now
-    truncate AuxPoW data (if using an AuxPoW chain) when *cp_height* is
-    nonzero.  AuxPoW data is still present when *cp_height* is zero.
-    Non-AuxPoW chains are unaffected.
-
-
-Version 1.4.1
-=============
-
 New methods
 -----------
 
@@ -293,9 +281,13 @@ Version 1.6.0
 Changes
 -------
 
+  * The status of a scripthash has its definition tightened in a backwards-compatible way: mempool txs now have a
+    :ref:`canonical ordering <mempoolorder>` specified for the calculation (previously their order was unspecified).
   * :func:`blockchain.estimatefee` changed to allow for an optional second argument, :const:`"mode"`.
-  * :func:`blockchain.scripthash.get_mempool` previously did not define an order for mempool transactions. We now
-    mandate a :ref:`specific ordering <mempoolorder>`.
+  * :func:`blockchain.scripthash.get_mempool`, :func:`blockchain.scripthash.get_history`,
+    :func:`blockchain.address.get_mempool`, and :func:`blockchain.address.get_history` previously did not define an
+    order for mempool transactions. We now mandate a :ref:`canonical ordering <mempoolorder>`.
+  * :func:`blockchain.block.headers` now returns headers as a list, instead of a single concatenated hex string
 
 New methods
 -----------

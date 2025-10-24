@@ -11,7 +11,7 @@ Two standards `JSON RPC 1.0
 <http://www.jsonrpc.org/specification_v1>`_ and `JSON RPC 2.0
 <http://www.jsonrpc.org/specification>`_ are specified; use of version
 2.0 is encouraged but not required.  Server support for batch requests
-*is* implemented in Fulcrum as of version 1.6.0.
+*is* implemented in Fulcrum as of Fulcrum version 1.6.0.
 
 .. note::
   A client or server should only indicate JSON RPC 2.0 by
@@ -154,7 +154,7 @@ block)
 
   * ``height`` is the height of the block it is in.
 
-3. Next, with mempool transactions in a :ref:`specified order <mempoolorder>`, append a similar
+3. Next, with mempool transactions in a :ref:`canonical order <mempoolorder>`, append a similar
 string for those transactions, but where **height** is ``-1`` if the
 transaction has at least one unconfirmed input, and ``0`` if all
 inputs are confirmed.
@@ -378,10 +378,10 @@ Then possible prefixes would be either: :const:`"a"` (4 bit prefix of the above 
 Mempool Transaction Ordering
 ----------------------------
 
-The protocol specifies a specific ordering for mempool transactions. This ordering is not necessarily topological
+The protocol specifies a canonical ordering for mempool transactions. This ordering is not necessarily topological
 ordering, but is something simpler. The mempool ordering in this protocol is specified as follows: mempool transactions
 are sorted in ascending order using the following pseudo-code comparator function (where :const:`a` and :const:`b` are
-transactions to be compared)::
+mempool transactions to be compared)::
 
     (a.hasUnconfirmedParents, a.txHash) < (b.hasUnconfirmedParents, b.txHash)
 

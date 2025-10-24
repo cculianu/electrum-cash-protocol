@@ -69,6 +69,8 @@ Return the confirmed and unconfirmed history of a Bitcoin Cash address.
   .. versionadded:: 1.4.3
   .. versionchanged:: 1.5.1
      Allow pagination of history (added from_height, to_height)
+  .. versionchanged:: 1.6.0
+     results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   * *address*
 
@@ -104,7 +106,7 @@ Return the unconfirmed transactions of a Bitcoin Cash address.
 
   .. function:: blockchain.address.get_mempool(address)
   .. versionadded:: 1.4.3
-  .. versionchanged:: 1.6
+  .. versionchanged:: 1.6.0
      results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   * *address*
@@ -268,7 +270,6 @@ Return the block header at the given height.
   .. versionadded:: 1.3
   .. versionchanged:: 1.4
      *cp_height* parameter added
-  .. versionchanged:: 1.4.1
 
   *height*
 
@@ -318,11 +319,11 @@ With *cp_height* 8::
 
   {
     "branch": [
-       "000000004ebadb55ee9096c9a2f8880e09da59c0d68b1c228da88e48844a1485",
-       "96cbbc84783888e4cc971ae8acf86dd3c1a419370336bb3c634c97695a8c5ac9",
-       "965ac94082cebbcffe458075651e9cc33ce703ab0115c72d9e8b1a9906b2b636",
-       "89e5daa6950b895190716dd26054432b564ccdc2868188ba1da76de8e1dc7591"
-       ],
+      "000000004ebadb55ee9096c9a2f8880e09da59c0d68b1c228da88e48844a1485",
+      "96cbbc84783888e4cc971ae8acf86dd3c1a419370336bb3c634c97695a8c5ac9",
+      "965ac94082cebbcffe458075651e9cc33ce703ab0115c72d9e8b1a9906b2b636",
+      "89e5daa6950b895190716dd26054432b564ccdc2868188ba1da76de8e1dc7591"
+    ],
     "header": "0100000085144a84488ea88d221c8bd6c059da090e88f8a2c99690ee55dbba4e00000000e11c48fecdd9e72510ca84f023370c9a38bf91ac5cae88019bee94d24528526344c36649ffff001d1d03e477",
     "root": "e347b1c43fd9b5415bf0d92708db8284b78daf4d0e24f9c3405f45feb85e25db"
   }
@@ -330,7 +331,7 @@ With *cp_height* 8::
 blockchain.block.headers
 ========================
 
-Return a concatenated chunk of block headers from the main chain.
+Return a number of consecutive block headers from the main chain.
 
 **Signature**
 
@@ -338,7 +339,8 @@ Return a concatenated chunk of block headers from the main chain.
   .. versionadded:: 1.2
   .. versionchanged:: 1.4
      *cp_height* parameter added
-  .. versionchanged:: 1.4.1
+  .. versionchanged:: 1.6.0
+     response contains *headers* field instead of *hex*
 
   *start_height*
 
@@ -366,11 +368,15 @@ Return a concatenated chunk of block headers from the main chain.
     the available headers will be returned.  If more headers than
     *max* were requested at most *max* will be returned.
 
-  * *hex*
+  * *hex* (protocol version < 1.6.0 only)
 
     The binary block headers concatenated together in-order as a
-    hexadecimal string.  Starting with version 1.4.1, AuxPoW data (if present
-    in the original header) is truncated if *cp_height* is nonzero.
+    hexadecimal string.
+
+  * *headers* (protocol version >= 1.6.0)
+
+    An array containing the binary block headers in-order; each header is a
+    hexadecimal string.
 
   * *max*
 
@@ -396,13 +402,27 @@ Return a concatenated chunk of block headers from the main chain.
 **Example Response**
 
 See :ref:`here <cp_height example>` for an example of *root* and
-*branch* keys.
+*branch* keys (protocol < 1.6.0).
 
 ::
 
   {
     "count": 2,
-    "hex": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e36299"
+    "hex": "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e36299",
+    "max": 2016
+  }
+
+See :ref:`here <cp_height example>` for an example of *root* and
+*branch* keys (protocol >= 1.6.0).
+
+::
+
+  {
+    "count": 2,
+    "headers": [
+      "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c",
+      "010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e36299"
+    ],
     "max": 2016
   }
 
@@ -646,7 +666,7 @@ Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefi
 
   .. function:: blockchain.reusable.get_mempool(rpa_prefix)
   .. versionadded:: 1.5.3
-  .. versionchanged:: 1.6
+  .. versionchanged:: 1.6.0
      results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
 **Availability**
@@ -728,7 +748,7 @@ Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefi
 
   .. function:: blockchain.rpa.get_mempool(rpa_prefix)
   .. versionadded:: 1.5.3
-  .. versionchanged:: 1.6
+  .. versionchanged:: 1.6.0
      results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   *rpa_prefix*
@@ -745,7 +765,7 @@ Return the unconfirmed (mempool) transactions for an :ref:`rpa_prefix <rpa prefi
 
 **Result**
 
-  A list of unconfirmed transactions in a :ref:`specified order <mempoolorder>`. Each unconfirmed transaction is a
+  A list of unconfirmed transactions in a :ref:`canonical order <mempoolorder>`. Each unconfirmed transaction is a
   dictionary with the following keys:
 
   * *height*
@@ -902,6 +922,8 @@ Return the confirmed and unconfirmed history of a :ref:`script hash
   .. versionadded:: 1.1
   .. versionchanged:: 1.5.1
      Allow pagination of history (added from_height, to_height)
+  .. versionchanged:: 1.6.0
+     Any mempool transactions appearing at the end must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   *scripthash*
 
@@ -924,7 +946,7 @@ Return the confirmed and unconfirmed history of a :ref:`script hash
 **Result**
 
   A list of confirmed transactions in blockchain order, with the
-  output of :func:`blockchain.scripthash.get_mempool` appended to the
+  :ref:`sorted <mempoolorder>` output of :func:`blockchain.scripthash.get_mempool` appended to the
   list (mempool is appended only if ``to_height`` is ``-1``).  Each confirmed transaction
   is a dictionary with the following keys:
 
@@ -936,12 +958,11 @@ Return the confirmed and unconfirmed history of a :ref:`script hash
 
     The transaction hash in hexadecimal.
 
-  Note that as of Fulcrum 1.8.0 the transaction history for a script hash
+  Note that as of Fulcrum version 1.8.0 the transaction history for a script hash
   also includes transactions that involve sending/receiving :ref:`CashTokens <cashtokens>`
   to/from that script hash.
 
-  See :func:`blockchain.scripthash.get_mempool` for how mempool
-  transactions are returned.
+  See :func:`blockchain.scripthash.get_mempool` for how mempool transactions are returned.
 
 **Result Examples**
 
@@ -978,7 +999,7 @@ hashes>`.
 
   .. function:: blockchain.scripthash.get_mempool(scripthash)
   .. versionadded:: 1.1
-  .. versionchanged:: 1.6
+  .. versionchanged:: 1.6.0
      results must be :ref:`sorted <mempoolorder>` (previously unspecified order)
 
   *scripthash*
@@ -987,7 +1008,7 @@ hashes>`.
 
 **Result**
 
-  A list of mempool transactions in a :ref:`specified order <mempoolorder>`.  Each mempool
+  A list of mempool transactions in a :ref:`canonical order <mempoolorder>`.  Each mempool
   transaction is a dictionary with the following keys:
 
   * *height*
@@ -1104,7 +1125,7 @@ Return an ordered list of UTXOs sent to a script hash.
         "nft": {
           "capability": "minting",
           "commitment": "f00fd00fb33f"
-         }
+        }
       },
       "tx_hash": "87489c43bae69c297bbaf65276573b0001c20c647a3d54d2842a4425ff87bacc",
       "tx_pos": 1,
@@ -1833,7 +1854,7 @@ Returns a dictionary containing various mempool stats obtained from the bitcoin 
 **Signature**
 
   .. function:: mempool.get_info()
-  .. versionadded:: 1.6
+  .. versionadded:: 1.6.0
 
 **Result**
 
