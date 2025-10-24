@@ -1227,6 +1227,101 @@ Protocol version 1.0 returning an error as the result:
 
   "258: txn-mempool-conflict"
 
+blockchain.transaction.broadcast_package
+========================================
+
+*(BTC Only)* Broadcast a package of transactions to the network via the :const:`submitpackage` RPC. The package must
+consist of a child with its parents, and none of the parents may depend on one another. The package must be
+topologically sorted, with the child being the last element in the array.
+
+.. note::  Note that this RPC only available on BTC when the backing node is Bitcoin Core v28.0.0 or above.
+
+**Signature**
+
+  .. function:: blockchain.transaction.broadcast_package(raw_txs, verbose=false)
+
+  *raw_txs*
+
+    An array of raw transactions, each as a hexadecimal string.
+
+  *verbose*
+
+    Whether a verbose coin-specific response is required.
+
+**Result**
+
+  If *verbose* is :const:`false`:
+
+    A dictionary with the following keys:
+
+    * `success`
+        * Type: bool
+        * Value: Indicating the result of the package submission
+    * `errors`
+        * Type: Optional[List[Dict]]
+        * Value: Error message and txid (NOT wtxid) of transactions that were not accepted
+
+  If *verbose* is :const:`true`:
+
+    The bitcoind response according to its RPC API documentation.
+    Note that the exact structure and semantics can depend on the bitcoind version,
+    and hence the electrum protocol can make no guarantees about it.
+
+.. note:: The exact relay behaviour might depend on the bitcoind version of the server.
+
+.. note:: Server implementations should verify (e.g. by enforcing a minimum bitcoind version at runtime)
+  that the backing bitcoind supports relay of transaction packages. For example, note that Bitcoin Core 26.0
+  already exposes the `submitpackage` RPC however it is effectively non-functional until Bitcoin Core 28.0.
+
+**Result Example**
+
+When *verbose* is :const:`false` (no errors)::
+
+    {
+      "success": true
+    }
+
+When *verbose* is :const:`false` (with errors)::
+
+    {
+      "success": false,
+      "errors":
+      [
+        {
+          "txid": "ec6f295cd4b1b91f59cabb0ab8fdc7c76580db08be6426e465f75a69d82b9659",
+          "error": "bad-txns-inputs-missingorspent"
+        }
+      ]
+    }
+
+When *verbose* is :const:`true`::
+
+    {                                   (json object)
+      "package_msg" : "str",            (string) The transaction package result message. "success" indicates all transactions were accepted into or are already in the mempool.
+      "tx-results" : {                  (json object) transaction results keyed by wtxid
+        "wtxid" : {                     (json object) transaction wtxid
+          "txid" : "hex",               (string) The transaction hash in hex
+          "other-wtxid" : "hex",        (string, optional) The wtxid of a different transaction with the same txid but different witness found in the mempool. This means the submitted transaction was ignored.
+          "vsize" : n,                  (numeric, optional) Sigops-adjusted virtual transaction size.
+          "fees" : {                    (json object, optional) Transaction fees
+            "base" : n,                 (numeric) transaction fee in BTC
+            "effective-feerate" : n,    (numeric, optional) if the transaction was not already in the mempool, the effective feerate in BTC per KvB. For example, the package feerate and/or feerate with modified fees from prioritisetransaction.
+            "effective-includes" : [    (json array, optional) if effective-feerate is provided, the wtxids of the transactions whose fees and vsizes are included in effective-feerate.
+              "hex",                    (string) transaction wtxid in hex
+              ...
+            ]
+          },
+          "error" : "str"               (string, optional) The transaction error string, if it was rejected by the mempool
+        },
+        ...
+      },
+      "replaced-transactions" : [       (json array, optional) List of txids of replaced transactions
+        "hex",                          (string) The transaction id
+        ...
+      ]
+    }
+
+
 blockchain.transaction.dsproof.get
 ==================================
 
@@ -1849,7 +1944,7 @@ pool, weighted by transaction size.
 mempool.get_info
 ================
 
-Returns a dictionary containing various mempool stats obtained from the bitcoin daemon's :const:`"getmempoolinfo"` RPC.
+Returns a dictionary containing various mempool stats obtained from the bitcoin daemon's `getmempoolinfo` RPC.
 
 **Signature**
 
@@ -1862,7 +1957,7 @@ Returns a dictionary containing various mempool stats obtained from the bitcoin 
   :const:`"mempoolminfee"`, :const:`"minrelaytxfee"`, :const:`"incrementalrelayfee"`, :const:`"unbroadcastcount"`,
   and :const:`"fullrbf"`. However, on BCH for example, some of the preceding keys may be be missing altogether since the
   bitcoin daemon does have the same BTC-specific mempool concepts related to fees and as a result does not provide
-  some of these keys via the :const:`"getmempoolinfo"` RPC.
+  some of these keys via the `getmempoolinfo` RPC.
 
   Of note is the following key:
 
@@ -1872,22 +1967,22 @@ Returns a dictionary containing various mempool stats obtained from the bitcoin 
 
 **Example Result**
 
-  ::
+On BCH's Bitcoin Cash Node::
 
-   // On BCH's Bitcoin Cash Node:
-   {
-     "mempoolminfee": 0.00001000,
-     "minrelaytxfee": 0.00001000
-   }
+  {
+    "mempoolminfee": 0.00001000,
+    "minrelaytxfee": 0.00001000
+  }
 
-   // On BTC's Bitcoin Core:
-   {
-     "mempoolminfee": 0.00001000,
-     "minrelaytxfee": 0.00001000,
-     "incrementalrelayfee": 0.00001000,
-     "unbroadcastcount": 5,
-     "fullrbf": true
-   }
+On BTC's Bitcoin Core::
+
+  {
+    "mempoolminfee": 0.00001000,
+    "minrelaytxfee": 0.00001000,
+    "incrementalrelayfee": 0.00001000,
+    "unbroadcastcount": 5,
+    "fullrbf": true
+  }
 
 
 server.add_peer

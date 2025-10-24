@@ -283,7 +283,7 @@ Changes
 
   * The status of a scripthash has its definition tightened in a backwards-compatible way: mempool txs now have a
     :ref:`canonical ordering <mempoolorder>` specified for the calculation (previously their order was unspecified).
-  * :func:`blockchain.estimatefee` changed to allow for an optional second argument, :const:`"mode"`.
+  * :func:`blockchain.estimatefee` changed to allow for an optional second argument, *mode*.
   * :func:`blockchain.scripthash.get_mempool`, :func:`blockchain.scripthash.get_history`,
     :func:`blockchain.address.get_mempool`, and :func:`blockchain.address.get_history` previously did not define an
     order for mempool transactions. We now mandate a :ref:`canonical ordering <mempoolorder>`.
@@ -292,6 +292,8 @@ Changes
 New methods
 -----------
 
+  * :func:`blockchain.transaction.broadcast_package` to broadcast a package of transactions via `submitpackage`
+    (BTC only).
   * :func:`mempool.get_info` to get more detailed and general relayfee info.
 
 Deprecated methods
