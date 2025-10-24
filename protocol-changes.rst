@@ -288,6 +288,8 @@ Changes
     :func:`blockchain.address.get_mempool`, and :func:`blockchain.address.get_history` previously did not define an
     order for mempool transactions. We now mandate a :ref:`canonical ordering <mempoolorder>`.
   * :func:`blockchain.block.headers` now returns headers as a list, instead of a single concatenated hex string
+  * :func:`server.features` now may return an additional optional boolean key, `broadcast_package` to indicate the
+    server provides :func:`blockchain.transaction.broadcast_package`.
 
 New methods
 -----------

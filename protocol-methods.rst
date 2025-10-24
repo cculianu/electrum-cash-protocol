@@ -2065,6 +2065,8 @@ Return a list of features and services supported by the server.
      *cashtokens* key added (optional).
   .. versionchanged:: 1.5.3
      *rpa* key added (optional).
+  .. versionchanged:: 1.6.0
+     *broadcast_package* added (optional).
 
 **Result**
 
@@ -2194,6 +2196,12 @@ Return a list of features and services supported by the server.
 
       The first block height which is indexed by this server for RPA-related RPC calls. Prefix searching of blocks
       before this height will always yield empty results.
+
+  * *broadcast_package*
+
+    A boolean value. If present and set to :const:`true`, then the server definitely has
+    :func:`blockchain.transaction.broadcast_package` support. If this key is missing or :const:`false`, then the server
+    may not support this method.
 
 **Example Result**
 
