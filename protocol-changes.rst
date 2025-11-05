@@ -2,7 +2,7 @@
 Protocol Changes
 ================
 
-This documents lists changes made by protocol version.
+This document lists changes made by protocol version.
 
 Version 1.0
 ===========
@@ -150,18 +150,6 @@ Removed methods
 Version 1.4.1
 =============
 
-Changes
--------
-
-  * :func:`blockchain.block.header` and :func:`blockchain.block.headers` now
-    truncate AuxPoW data (if using an AuxPoW chain) when *cp_height* is
-    nonzero.  AuxPoW data is still present when *cp_height* is zero.
-    Non-AuxPoW chains are unaffected.
-
-
-Version 1.4.1
-=============
-
 New methods
 -----------
 
@@ -270,12 +258,12 @@ Version 1.5.2
 New methods
 -----------
 
-* :func:`blockchain.header.get` to retrieve a block header by its hash.
-* :func:`blockchain.scripthash.get_first_use` and :func:`blockchain.address.get_first_use` to retrieve
-  the first occurrence of a script hash or address on the block chain.
-* :func:`blockchain.transaction.get_confirmed_blockhash` to retrieve the block hash of the block that
-  contains a particular transaction.
-* :func:`daemon.passthrough` to forward RPC requests directly through to the bitcoin daemon (disabled by default).
+  * :func:`blockchain.header.get` to retrieve a block header by its hash.
+  * :func:`blockchain.scripthash.get_first_use` and :func:`blockchain.address.get_first_use` to retrieve
+    the first occurrence of a script hash or address on the block chain.
+  * :func:`blockchain.transaction.get_confirmed_blockhash` to retrieve the block hash of the block that
+    contains a particular transaction.
+  * :func:`daemon.passthrough` to forward RPC requests directly through to the bitcoin daemon (disabled by default).
 
 Version 1.5.3
 =============
@@ -283,6 +271,35 @@ Version 1.5.3
 New methods
 -----------
 
-* :func:`blockchain.rpa.get_history` and :func:`blockchain.rpa.get_mempool` to retrieve transactions matching a certain RPA (reusable payment address) prefix.
-* :func:`blockchain.reusable.get_history` and :func:`blockchain.reusable.get_mempool` which are compatibility-versions of the above for legacy clients.
-* :func:`server.features` added a new optional key, :const:`"rpa"`.
+  * :func:`blockchain.rpa.get_history` and :func:`blockchain.rpa.get_mempool` to retrieve transactions matching a certain RPA (reusable payment address) prefix.
+  * :func:`blockchain.reusable.get_history` and :func:`blockchain.reusable.get_mempool` which are compatibility-versions of the above for legacy clients.
+  * :func:`server.features` added a new optional key, :const:`"rpa"`.
+
+Version 1.6.0
+=============
+
+Changes
+-------
+
+  * The status of a scripthash has its definition tightened in a backwards-compatible way: mempool txs now have a
+    :ref:`canonical ordering <mempoolorder>` specified for the calculation (previously their order was unspecified).
+  * :func:`blockchain.estimatefee` changed to allow for an optional second argument, *mode*.
+  * :func:`blockchain.scripthash.get_mempool`, :func:`blockchain.scripthash.get_history`,
+    :func:`blockchain.address.get_mempool`, and :func:`blockchain.address.get_history` previously did not define an
+    order for mempool transactions. We now mandate a :ref:`canonical ordering <mempoolorder>`.
+  * :func:`blockchain.block.headers` now returns headers as a list, instead of a single concatenated hex string
+  * :func:`server.features` now may return an additional optional boolean key, `broadcast_package` to indicate the
+    server provides :func:`blockchain.transaction.broadcast_package`.
+
+New methods
+-----------
+
+  * :func:`blockchain.transaction.broadcast_package` to broadcast a package of transactions via `submitpackage`
+    (BTC only).
+  * :func:`mempool.get_info` to get more detailed and general relayfee info.
+
+Deprecated methods
+------------------
+
+  * :func:`blockchain.relayfee`. Switch to :func:`mempool.get_info`.
+
