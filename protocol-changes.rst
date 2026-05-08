@@ -297,6 +297,9 @@ New methods
   * :func:`blockchain.transaction.broadcast_package` to broadcast a package of transactions via `submitpackage`
     (BTC only).
   * :func:`mempool.get_info` to get more detailed and general relayfee info.
+  * :func:`blockchain.address.get_status` and :func:`blockchain.scripthash.get_status` were added in Fulcrum 2.1.1 or
+    above and they allow clients to query the status of an address or scripthash, as if invoking
+    :func:`blockchain.scripthash.subscribe`, but without actually subscribing for notifications on status changes.
 
 Deprecated methods
 ------------------

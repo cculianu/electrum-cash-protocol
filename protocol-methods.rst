@@ -145,6 +145,29 @@ them.
   The unique 32-byte hex-encoded :ref:`script hash <script hashes>` that
   corresponds to the decoded address.
 
+blockchain.address.get_status
+=============================
+
+Get the status of an address. The result is identical to :func:`blockchain.address.subscribe`, but without
+actually subscribing for notifications on status changes. Useful for clients that wish to query the current status
+without receiving notifications.
+
+**Signature**
+
+  .. function:: blockchain.address.get_status(address)
+  .. versionadded:: 1.6 (Only in Fulcrum 2.1.1 or above)
+
+  *address*
+
+    The address as a Cash Address string (with or without prefix, case
+    insensitive). Some server implementations do not support Legacy (base58)
+    addresses and are not required to do so by this specification. However,
+    Fulcrum does support both Legacy and Cash Address encodings.
+
+**Result**
+
+  The :ref:`status <status>` of the address.
+
 blockchain.address.listunspent
 ==============================
 
@@ -1039,6 +1062,25 @@ hashes>`.
     }
   ]
 
+blockchain.scripthash.get_status
+================================
+
+Get the status of a script hash. The result is identical to :func:`blockchain.scripthash.subscribe`, but without
+actually subscribing for notifications on status changes. Useful for clients that wish to query the current status
+without receiving notifications.
+
+**Signature**
+
+  .. function:: blockchain.scripthash.get_status(scripthash)
+  .. versionadded:: 1.6 (Only in Fulcrum 2.1.1 or above)
+
+  *scripthash*
+
+    The script hash as a hexadecimal string.
+
+**Result**
+
+  The :ref:`status <status>` of the script hash.
 
 blockchain.scripthash.listunspent
 =================================
