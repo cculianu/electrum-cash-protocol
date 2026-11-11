@@ -97,6 +97,27 @@ Return the confirmed and unconfirmed history of a Bitcoin Cash address.
 
   As for :func:`blockchain.scripthash.get_history`.
 
+blockchain.address.get_history_count
+====================================
+
+Return the transaction count of a Bitcoin Cash address (Fulcrum extension).
+
+**Signature**
+
+  .. function:: blockchain.address.get_history_count(address, include_unconfirmed=false)
+
+  * *address*
+
+    The address as a Cash Address or Legacy (base58) string.
+
+  * *include_unconfirmed*
+
+    Optional boolean, default ``false``. Set to ``true`` to include mempool transactions.
+
+**Result**
+
+  As for :func:`blockchain.scripthash.get_history_count`.
+
 blockchain.address.get_mempool
 ==============================
 
@@ -1011,6 +1032,31 @@ Return the confirmed and unconfirmed history of a :ref:`script hash
       "tx_hash": "9fbed79a1e970343fcd39f4a2d830a6bde6de0754ed2da70f489d0303ed558ec"
     }
   ]
+
+blockchain.scripthash.get_history_count
+======================================
+
+Return the transaction count of a :ref:`script hash <script hashes>`
+without returning its history (Fulcrum extension).
+
+**Signature**
+
+  .. function:: blockchain.scripthash.get_history_count(scripthash, include_unconfirmed=false)
+
+  * *scripthash*
+
+    The script hash as a hexadecimal string.
+
+  * *include_unconfirmed*
+
+    Optional boolean, default ``false``. Set to ``true`` to include mempool
+    transactions, including those with unconfirmed parents.
+
+**Result**
+
+  An integer count of confirmed transactions, plus mempool transactions if
+  requested. Each transaction is counted once, regardless of matching inputs
+  or outputs. Returns ``0`` if none match. Independent of ``max_history``.
 
 blockchain.scripthash.get_mempool
 =================================
